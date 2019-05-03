@@ -8,7 +8,7 @@ Sub Graf()
     On Error GoTo ErrorCounter
     On Error Resume Next 'if error occures, usualy helps to run function second time
     
-ErrorCounter:   'if error occures more than 5 times, user how to solve it in debugger
+ErrorCounter:   'if error occures more than 5 times, user have to solve it in debugger
     Dim i As Integer
     Dim answer As String
     i = i + 1
@@ -54,7 +54,7 @@ ErrorCounter:   'if error occures more than 5 times, user how to solve it in deb
     End With
     With ActiveChart.Axes(xlValue) 'add label of left axis
         .HasTitle = True
-        .AxisTitle.Text = "Poèet kníh"
+        .AxisTitle.Text = "Amount of b."
     End With
     ActiveChart.Parent.Name = "Graf1"   'add graph a name so I can manipulate it
     ActiveChart.HasTitle = True
