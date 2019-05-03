@@ -57,6 +57,6 @@ With ActiveSheet.ListObjects(x).Sort
     .SortMethod = xlPinYin
     .Apply
 End With
-
+ActiveSheet.Calculate
 Range("N1").Select
 End Sub
