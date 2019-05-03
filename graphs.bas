@@ -5,6 +5,17 @@ Sub Graf()
     '
     
     Dim Pic As Object
+    On Error GoTo ErrorCounter
+    On Error Resume Next 'if error occures, usualy helps to run function second time
+    
+ErrorCounter:   'if error occures more than 5 times, user how to solve it in debugger
+    Dim i As Integer
+    Dim answer As String
+    i = i + 1
+    If i = 5 Then
+    answer = MsgBox("Error occured too many times. Run debugger and press F5.", vbOKOnly)
+       Stop
+    End If
 
     If ActiveSheet.Name = "Knihy_L'uboš" Then   'if name of sheet is X, activate X
         Worksheets("Knihy_L'uboš").Activate
