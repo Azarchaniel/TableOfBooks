@@ -2,7 +2,10 @@ Sub histogramVysky()
 '
 'creating histogram of dimensions of books using Excel function
 '
-        Dim i As Integer
+    Dim i As Integer
+    Range("AC15:AC35").NumberFormat = "@"
+    Range("AC16:AC24").HorizontalAlignment = xlRight
+    Range("AC27:AC35").HorizontalAlignment = xlRight
 
     '
     'HEIGHT
@@ -13,9 +16,6 @@ Sub histogramVysky()
     'count how many values are between borders
     Next i
     Range("AC24").Value = "<40"
-    Range("AC15:AC35").NumberFormat = "@"
-    Range("AC16:AC24").HorizontalAlignment = xlRight
-    Range("AC27:AC35").HorizontalAlignment = xlRight
 
     '
     'WIDTH
@@ -30,4 +30,44 @@ Sub histogramVysky()
     Range("AC26").Value = "Dimension"
     Range("AD15").Value = "Amount of b."
     Range("AD26").Value = "Amount of b."
+
+    '
+    'drawing borders for histogram values
+    '
+    Range("AC15:AD15").Select
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("AC24:AD24").Select
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    
+    Range("AC25:AD25").Select
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+
+    
+    Range("AC26:AD26").Select
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("AC35:AD35").Select
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
 End Sub
