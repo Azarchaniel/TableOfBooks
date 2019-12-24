@@ -1,34 +1,37 @@
 Sub Graf()
     '
-    'Function for creating graphs. It's kinda slow, but it's because Excel is creating graphs very slow
-    'and there is a lot settings applying
+    'Function for creating graphs.
     '
     
-    Dim Pic As Object
     On Error GoTo ErrorCounter
-    On Error Resume Next 'if error occures, usualy helps to run function second time
+    On Error Resume Next    'if error occures, usualy helps to run function second time
     
 ErrorCounter:   'if error occures more than 5 times, user have to solve it in debugger
     Dim i As Integer
     Dim answer As String
     i = i + 1
     If i = 5 Then
-    answer = MsgBox("Error occured too many times. Run debugger and press F5.", vbOKOnly)
-       Stop
+       answer = MsgBox("Chyba sa objavila príliš ve¾a krát. Spus debugger a stlaè F5.", vbOKOnly)
+       Debug.Assert False
     End If
+    
+    Dim Pic As Object
+    Dim ws As Worksheet
 
-    If ActiveSheet.Name = "Knihy_L'uboš" Then   'if name of sheet is X, activate X
+    If ActiveSheet.Name = "Knihy_L'uboš" Then
         Worksheets("Knihy_L'uboš").Activate
+        ws = "Knihy_L'uboš"
     End If
     If ActiveSheet.Name = "Knihy_Žanetka" Then
         Worksheets("Knihy_Žanetka").Activate
+        ws = "Knihy_Žanetka"
     End If
-    Range("AE15:AN35").Select   'double check of deleting space where graphs will be
-    Range("AE15:AN35").Delete
-    Range("AE15:AN35").Clear
+    Range("MiestoPreGraf").Select   'double check of deleting space where graphs will be
+    Range("MiestoPreGraf").Delete
+    Range("MiestoPreGraf").Clear
 
     For Each Pic In ActiveSheet.Pictures
-        If Not Intersect(Pic.TopLeftCell, Range("AB15:AN35")) Is Nothing Then
+        If Not Intersect(Pic.TopLeftCell, Range("$AB$15:$AN$35")) Is Nothing Then
             Pic.Delete
         End If
     Next Pic
@@ -39,95 +42,91 @@ ErrorCounter:   'if error occures more than 5 times, user have to solve it in de
     ' /// Graph of height ///
     '
     
-    Range("AC15:AD24").Select
+    Range("$AJ$16:$AP$25").Select
     ActiveSheet.Shapes.AddChart2(201, xlColumnClustered).Select 'create graph of type 2
-    ActiveChart.SetSourceData Source:=Range("$AC$16:$AD$24")    'source data
+    ActiveChart.SetSourceData Source:=Range("$AG$17:$AH$25")    'source data
     With ActiveChart.Parent
-        .Top = Range("AF15").Top 'set position of graph - upper border on this cell
-        .Left = Range("AF15").Left 'left border at this cell
-        .Width = Range("AF15:AL24").Width
-        .Height = Range("AF15:AL24").Height
+        .Top = Range("$AJ$16").Top 'set position of graph - upper border on this cell
+        .Left = Range("$AJ$16").Left 'left border at this cell
+        .Width = Range("$AJ$16:$AP$25").Width
+        .Height = Range("$AJ$16:$AP$25").Height
     End With
+    ActiveChart.HasLegend = False
     With ActiveChart.Axes(xlCategory) 'add label to the lower axis
         .HasTitle = True
-        .AxisTitle.Text = "Height of b. in cm"
+        .AxisTitle.Text = "Výška knihy v cm"
     End With
     With ActiveChart.Axes(xlValue) 'add label of left axis
         .HasTitle = True
-        .AxisTitle.Text = "Amount of b."
+        .AxisTitle.Text = "Poèet kníh"
     End With
     ActiveChart.Parent.Name = "Graf1"   'add graph a name so I can manipulate it
     ActiveChart.HasTitle = True
-    ActiveChart.ChartTitle.Text = "Height of b."
+    ActiveChart.ChartTitle.Text = "Výška kníh"
     ActiveChart.FullSeriesCollection(1).ApplyDataLabels 'activate graph's labels
     ActiveChart.ChartGroups(1).GapWidth = 52
     Application.CommandBars("Format Object").Visible = False
-    'Sheets("List1").Select
     ActiveChart.PlotArea.Select
     Application.CommandBars("Format Object").Visible = False
     
     ActiveSheet.ChartObjects("Graf1").Activate  'activate the specific graph
-    ActiveChart.Parent.Cut  'cut it to clipboard
-    Range("AS15").Select    'and paste it to different
+    ActiveChart.Parent.Cut                      'cut it to clipboard
+    Range("$AS$16").Select                      'and paste it to different cell
     ActiveSheet.Paste
     'there was a problem with exporting graph as a picture, when it was only in clipboard
     
     ActiveSheet.ChartObjects("Graf1").Chart.CopyPicture xlScreen, xlBitmap  'select graph, copy it as a picture
-    Range("AE15:BB35").Select   'prepare area for pasting
-    Range("AE15:BB35").Delete
-    Range("AE15:BB35").Clear
-    Range("AF15").Select
-    ActiveSheet.Pictures.Paste.Select   'normal paste doesnt work for pictures
+    ActiveSheet.ChartObjects("Graf1").Delete    'delete graph
+    Range("$AJ$16").Select
+    ActiveSheet.Pictures.Paste.Select   'paste pic of graph
     
     
     '
     ' /// Graph of width ///
+    '
     ' same algortihm as above, but for different graph.
     'Maybe it could be written more general way and applied for both graphs at once,
     'but I doubt it would improve performance
     
-    Range("AC26:AD35").Select
+    Range("$AJ$27:$AP$36").Select
     ActiveSheet.Shapes.AddChart2(201, xlColumnClustered).Select
-    ActiveChart.SetSourceData Source:=Range("$AC$27:$AD$35")
+    ActiveChart.SetSourceData Source:=Range("$AG$28:$AH$36")
     With ActiveChart.Parent
-        .Top = Range("AF26").Top
-        .Left = Range("AF26").Left
-        .Width = Range("AF26:AL35").Width
-        .Height = Range("AF26:AL35").Height
+        .Top = Range("$AJ$27").Top
+        .Left = Range("$AJ$27").Left
+        .Width = Range("$AJ$27:$AP$36").Width
+        .Height = Range("$AJ$27:$AP$36").Height
     End With
+    ActiveChart.HasLegend = False
     With ActiveChart.Axes(xlCategory)
         .HasTitle = True
-        .AxisTitle.Text = "Width of b. in cm"
+        .AxisTitle.Text = "Šírka knihy v cm"
     End With
     With ActiveChart.Axes(xlValue)
         .HasTitle = True
-        .AxisTitle.Text = "Amount of b."
+        .AxisTitle.Text = "Poèet kníh"
         
     End With
     ActiveChart.Parent.Name = "Graf2"
     ActiveChart.HasTitle = True
-    ActiveChart.ChartTitle.Text = "Width of b."
+    ActiveChart.ChartTitle.Text = "Šírka kníh"
     ActiveChart.FullSeriesCollection(1).ApplyDataLabels
     ActiveChart.ChartGroups(1).GapWidth = 52
     Application.CommandBars("Format Object").Visible = False
-    'Sheets("List1").Select
     ActiveChart.PlotArea.Select
     Application.CommandBars("Format Object").Visible = False
     
     ActiveSheet.ChartObjects("Graf2").Activate
     ActiveChart.Parent.Cut
-    Range("AE26").Select
+    Range("$AS$27").Select
     ActiveSheet.Paste
     
     ActiveSheet.ChartObjects("Graf2").Chart.CopyPicture xlScreen, xlBitmap
-    Range("AE26:BB35").Select
-    Range("AE26:BB35").Delete
-    Range("AE26:BB35").Clear
-    Range("AF26").Select
+    ActiveSheet.ChartObjects("Graf2").Delete
+    Range("$AJ27").Select
     ActiveSheet.Pictures.Paste.Select
     
-    
-    Range("AE37").Select
-    
+    Range("$AJ$37").Select
     
 End Sub
+
