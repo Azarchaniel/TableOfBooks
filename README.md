@@ -6,9 +6,6 @@ It contains couple of functions written in VBA for creating statistics, graphs, 
 ### Prerequisites
 Excel (it should work also with other table editors), macro and VBA enabled.
 
-### Installing
-No need, it's just Excel file with macros.
-
 ### Author
 Lubos Csonka 
 
