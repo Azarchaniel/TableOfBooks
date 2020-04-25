@@ -1,0 +1,214 @@
+Attribute VB_Name = "pouziStyl"
+Sub applyStyle()
+Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
+'
+' ApplyStyle Makro
+'
+'
+    Dim wRng1 As Range 'working range
+    Dim wRng2 As Range
+    Dim tRng As Range   'total range
+    Dim row As Range
+    Dim offset As Integer
+    'every sheet is slightly different, so I have to adjust settings
+    
+    If ActiveSheet.Name = "Knihy_L'uboš" Then
+        Worksheets("Knihy_L'uboš").Activate
+        Set wRng1 = Range("A4:AF4")
+        Set wRng2 = Range("A5:AF5")
+        Set tRng = Range("A4:A2500")
+        offset = 31
+    End If
+    If ActiveSheet.Name = "Knihy_Žanetka" Then
+        Worksheets("Knihy_Žanetka").Activate
+        Set wRng1 = Range("A4:AF4")
+        Set wRng2 = Range("A5:AF5")
+        Set tRng = Range("A4:A2500")
+        offset = 31
+    End If
+    If ActiveSheet.Name = "LP" Then
+        Worksheets("LP").Activate
+        Set wRng1 = Range("A4:L4")
+        Set wRng2 = Range("A5:L5")
+        Set tRng = Range("A4:A500")
+        offset = 11
+    End If
+    If ActiveSheet.Name = "Èasopisy" Then
+        Worksheets("Èasopisy").Activate
+        Set wRng1 = Range("A4:H4")
+        Set wRng2 = Range("A5:H5")
+        Set tRng = Range("A4:A500")
+        offset = 7
+    End If
+    
+    Dim applyStyle As Boolean
+
+    applyStyle = False
+    For Each sRow In tRng.Rows
+        'Im checking, if every other line is grey AND if line+1 is white. If Yes, we do not need to apply style
+        'TODO: check the whole row,not just one cell
+        If sRow.row Mod 2 = 0 Then
+            If Not (sRow.Interior.TintAndShade < -0.0000000001 And _
+            sRow.offset(1, 0).Interior.TintAndShade > -0.0000000001) Then
+                applyStyle = True 'if style is not correct, set flag and exit loop
+                Exit For
+            End If
+        End If
+    Next sRow
+    
+    If applyStyle = True Then
+        Call TurnOffCalc
+        
+        wRng1.Select
+        Call Grey   'apply Grey style
+        wRng1.Copy  'copy whole row
+        Call progressBar(41)    'set progress bar to 41 perc.
+        For Each row In tRng.Rows
+            If row.row Mod 2 = 0 Then
+              Range(row, row.offset(0, offset)).PasteSpecial Paste:=xlPasteFormats  'for every second row, paste formats
+            End If
+        Next row
+        
+        Call progressBar(70)
+        
+        wRng2.Select
+        Call White
+        wRng2.Copy
+        For Each row In tRng.Rows
+            If row.row Mod 2 = 1 Then
+              Range(row, row.offset(0, offset)).PasteSpecial Paste:=xlPasteFormats
+            End If
+        Next row
+        Call progressBar(98)
+        Call TurnOnCalc
+    End If
+End Sub
+
+'following code contain functions for setting styles such as colors, lines, bold text etc
+Sub Grey()
+    With Selection
+        .HorizontalAlignment = xlCenter
+        .VerticalAlignment = xlCenter
+    End With
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorDark1
+        .TintAndShade = -0.149998474074526
+        .PatternTintAndShade = 0
+    End With
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ThemeColor = 2
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ThemeColor = 2
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ThemeColor = 2
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ThemeColor = 2
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    Selection.Borders(xlInsideVertical).LineStyle = xlNone
+    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
+    End Sub
+    
+    Sub White()
+    With Selection
+        .HorizontalAlignment = xlCenter
+        .VerticalAlignment = xlCenter
+    End With
+    With Selection.Interior
+        .Pattern = xlSolid
+        .PatternColorIndex = xlAutomatic
+        .ThemeColor = xlThemeColorDark1
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideHorizontal)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
+    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
+    With Selection.Borders(xlEdgeLeft)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeRight)
+        .LineStyle = xlContinuous
+        .ColorIndex = 0
+        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlInsideVertical)
+        .LineStyle = xlContinuous
+        .ThemeColor = 1
+        .TintAndShade = -0.149998474074526
+        .Weight = xlThin
+    End With
+    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
+
+End Sub

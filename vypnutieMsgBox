@@ -1,0 +1,44 @@
+Attribute VB_Name = "vypnutieMsgBox"
+Attribute VB_Base = "0{30926446-5FBF-40C0-8169-A56B8E0D424F}{607BD7A9-9CDD-4732-AE78-E97BE534FC66}"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Attribute VB_TemplateDerived = False
+Attribute VB_Customizable = False
+Private Sub UserForm_Activate()
+    'Approx over top/left cell (depends on toolbars visible)
+    Me.Top = Application.Top + (Application.UsableHeight / 2) - (Me.Height / 2) + 90
+   Me.Left = Application.Left + (Application.UsableWidth / 2) - (Me.Width / 2)
+End Sub
+
+'save, backup, exit
+Private Sub sbe_Click()
+    ThisWorkbook.Save   'save changes
+    X = Shell("POWERSHELL.exe " & """D:\Programy\dbklp.ps1""", 1)   'call a script through Powershell
+    vypnutieMsgBox.Hide 'hide modal
+    shouldCancel = False    'tell Excel that he can quit
+End Sub
+'dont save, exit
+Private Sub e_Click()
+    ThisWorkbook.Saved = True 'tell Excel, that he is Saved (even when he is not)
+    vypnutieMsgBox.Hide
+    shouldCancel = False
+End Sub
+'do nothing, hide modal
+Private Sub n_Click()
+    vypnutieMsgBox.Hide
+    shouldCancel = True 'tell Excel that he cant quit
+End Sub
+'save, exit
+Private Sub se_Click()
+    ThisWorkbook.Save   'save changes
+    vypnutieMsgBox.Hide 'hide modal
+    shouldCancel = False    'tell Excel that he can quit
+End Sub
+
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then 'if custom Exit modal is turned off by X button, do same as n button
+        Call n_Click
+    End If
+End Sub

@@ -1,0 +1,21 @@
+Attribute VB_Name = "Progress"
+Attribute VB_Base = "0{B4C5CAE8-F8F9-461D-A703-5FAD3A0C1DB2}{99A5FD76-4282-4DA0-BC6E-E0F01F46394A}"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Attribute VB_TemplateDerived = False
+Attribute VB_Customizable = False
+
+Option Explicit
+
+Private Sub UserForm_Activate()
+    'Approx over top/left cell (depends on toolbars visible)
+    Me.Top = Application.Top + (Application.UsableHeight / 2) - (Me.Height / 2) + 90
+   Me.Left = Application.Left + (Application.UsableWidth / 2) - (Me.Width / 2)
+End Sub
+Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
+    If CloseMode = vbFormControlMenu Then
+        Cancel = True 'so user cant close the modal
+    End If
+End Sub

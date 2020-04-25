@@ -1,0 +1,110 @@
+Attribute VB_Name = "histogram"
+Sub histogramVysky()
+    '
+    'creating histogram of dimensions of books using Excel function
+    '
+
+    Dim i As Integer
+    Dim ws As String
+    
+    'activate particular sheet to work with
+    If ActiveSheet.Name = "Knihy_L'uboš" Then
+        Worksheets("Knihy_L'uboš").Activate
+        ws = "Knihy_L'uboš"
+    End If
+    If ActiveSheet.Name = "Knihy_Žanetka" Then
+        Worksheets("Knihy_Žanetka").Activate
+        ws = "Knihy_Žanetka"
+    End If
+    
+    'format of cell is TEXT
+    Range("$AH$16:$AH$36").NumberFormat = "@"
+    
+    '
+    'Height range text
+    '
+    For i = 0 To 8
+      Range("$AH$" & 17 + i).Value = (i * 5) & " - " & (i * 5 + 5)  'creating labels
+      Range("$AI$" & 17 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range("Výška"), "<=" & (i * 5 + 5), Worksheets(ws).Range("Výška"), ">" & (i * 5))
+    Next i
+    Range("$AH$25").Value = "<40"
+    
+    '
+    'Width range text
+    '
+    For i = 0 To 8
+      Range("$AH$" & 28 + i).Value = (i * 5) & " - " & (i * 5 + 5)
+      Range("$AI$" & 28 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range("Šírka"), "<=" & (i * 5 + 5), Worksheets(ws).Range("Šírka"), ">" & (i * 5))
+      'count how many values are between borders
+      'Im using named range
+    Next i
+    Range("$AH$36").Value = "<40"
+    
+    Range("$AH$16").Value = "Výška knihy v cm"
+    Range("$AH$27").Value = "Šírka knihy v cm"
+    Range("$AH$16").WrapText = True
+    Range("$AH$27").WrapText = True
+    Range("$AI$16").Value = "Poèet kníh"
+    Range("$AI$27").Value = "Poèet kníh"
+    Range("$AH$16:$AI$16").Font.Italic = True
+    Range("$AH$27:$AI$27").Font.Italic = True
+    
+    '
+    'Drawing of borders for histogram values
+    '
+    Range("$AH$16:$AI$16").Select
+    Range("$AH$16:$AI$16").HorizontalAlignment = xlLeft
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("$AH$25:$AI$25").Select
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    
+    Range("$AH$27:$AI$27").Select
+    Range("$AH$27:$AI$27").HorizontalAlignment = xlLeft
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+    End With
+    Range("$AH$36:$AI$36").Select
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    
+    'set alignment
+    Range("$AH$17:$AI$25").HorizontalAlignment = xlRight
+    Range("$AH$28:$AI$36").HorizontalAlignment = xlRight
+    Range("$AH$17:$AI$25").VerticalAlignment = xlBottom
+    Range("$AH$28:$AI$36").VerticalAlignment = xlBottom
+
+End Sub
+

@@ -1,0 +1,7 @@
+Attribute VB_Name = "Global_var"
+Global shouldCancel As Boolean
+
+Public Sub Global_var()
+
+End Sub
+

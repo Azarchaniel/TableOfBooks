@@ -1,0 +1,132 @@
+Attribute VB_Name = "autoFilling"
+Public Function fillBookByISBN(ISBN As String, address As String)
+'key: cvAALPZ596Xc4Fnrv6pnw
+'secret: QzzB23XpseKhgyfAjkuSci20tct1GjXWR67Noc97SZM 'only for writing
+
+    Dim APIkey As String
+    Dim APIurl As String
+    Dim xmlObj As MSXML2.XMLHTTP60
+    
+    Set xmlObj = New MSXML2.XMLHTTP60
+    
+    APIkey = "cvAALPZ596Xc4Fnrv6pnw"
+    APIurl = "https://www.goodreads.com/book/isbn/" & ISBN & "?key=" & APIkey
+    
+    xmlObj.Open bstrMethod:="GET", bstrURL:=APIurl
+    xmlObj.Send
+    
+    If xmlObj.statusText <> "OK" Then
+        Select Case xmlObj.statusText
+        Case "Not Found"
+            MsgBox "Chyba API: Kniha nebola nájdená"
+        Case Else
+            MsgBox "Chyba API: Nešpecifikovaná chyba"
+        End Select
+        Exit Function
+    End If
+    
+    Dim xmlDoc As MSXML2.DOMDocument60
+    Dim xNodes As MSXML2.IXMLDOMNodeList
+    Dim xNode As MSXML2.IXMLDOMNode
+    
+    Set xDoc = New MSXML2.DOMDocument60
+    xDoc.LoadXML (xmlObj.responseText)
+    
+    Dim title As String
+    Dim authorNodes As MSXML2.IXMLDOMNodeList
+    Dim authorNode As MSXML2.IXMLDOMNode
+    Dim author(1 To 10) As String 'array author(1) = "somebody", author(2) = ...
+    Dim translator As String
+    'Dim editor As String
+    Dim ilustrator As String
+    Dim publisher As String
+    Dim language As String
+    Dim yearTemp As String
+    Dim year As Integer
+    Dim roleTemp As String
+    
+    Set xNodes = xDoc.SelectNodes("//GoodreadsResponse/book/authors/author")
+    
+    Dim IterAuthor As Integer
+    IterAuthor = 1
+     
+    For Each xNode In xNodes
+        roleTemp = xNode.SelectSingleNode("role").Text
+        If Len(roleTemp) = 0 Then
+            author(IterAuthor) = switchNames(xNode.SelectSingleNode("name").Text)
+            IterAuthor = IterAuthor + 1
+        End If
+
+        Select Case roleTemp
+            Case "Translator"
+                If Len(translator) > 1 Then
+                    translator = translator & "; " & switchNames(xNode.SelectSingleNode("name").Text)
+                Else
+                    translator = switchNames(xNode.SelectSingleNode("name").Text)
+                End If
+            Case "Ilustrator"
+                If Len(ilustrator) < 1 Then
+                    ilustrator = ilustrator & "; " & switchNames(xNode.SelectSingleNode("name").Text)
+                Else
+                    ilustrator = switchNames(xNode.SelectSingleNode("name").Text)
+                End If
+        End Select
+    Next
+    
+    title = xDoc.ChildNodes.Item(1).ChildNodes.Item(1).SelectSingleNode("title").Text
+    publisher = xDoc.ChildNodes.Item(1).ChildNodes.Item(1).SelectSingleNode("publisher").Text
+    yearTemp = xDoc.ChildNodes.Item(1).ChildNodes.Item(1).SelectSingleNode("publication_year").Text
+    If Len(yearTemp) > 0 And IsNumeric(yearTemp) Then
+        year = CInt(yearTemp)
+    End If
+    
+    Select Case xDoc.ChildNodes.Item(1).ChildNodes.Item(1).SelectSingleNode("language_code").Text
+        Case "slo"
+            language = "sk"
+        Case "cze"
+            language = "cz"
+        Case "eng"
+            language = "en"
+        Case Else
+            language = ""
+    End Select
+    
+    Dim newAddress As Range
+    Set newAddress = Range("A1").offset(address - 1, 0)
+    
+    newAddress.offset(0, 0).Value = author(1)
+    newAddress.offset(0, 1).Value = author(2)
+    newAddress.offset(0, 2).Value = author(3)
+    newAddress.offset(0, 3).Value = author(4)
+    newAddress.offset(0, 4).Value = author(5)
+    newAddress.offset(0, 5).Value = author(6)
+    newAddress.offset(0, 6).Value = author(7)
+    newAddress.offset(0, 7).Value = author(8)
+    newAddress.offset(0, 8).Value = author(9)
+    newAddress.offset(0, 9).Value = author(10)
+    newAddress.offset(0, 11).Value = ilustrator
+    newAddress.offset(0, 12).Value = translator
+    newAddress.offset(0, 13).Value = title
+    newAddress.offset(0, 20).Value = publisher
+    newAddress.offset(0, 21).Value = year
+    newAddress.offset(0, 22).Value = language
+    newAddress.offset(0, 31).Value = Format(Date, "d.m.yyyy")
+    
+End Function
+
+Private Function switchNames(meno As String)
+    Dim wordlist As String
+    Dim arrayOfWords
+    Dim length As Integer
+    Dim menoTemp As String
+    
+    arrayOfWords = Split(meno, " ")
+    length = UBound(arrayOfWords) - LBound(arrayOfWords) + 1
+    For i = 0 To length - 2
+        menoTemp = menoTemp & " " & arrayOfWords(i)
+    Next i
+
+    'for Return, you have to assing value to the name of a function
+    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
+End Function
+

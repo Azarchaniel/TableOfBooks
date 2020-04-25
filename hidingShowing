@@ -1,0 +1,32 @@
+Attribute VB_Name = "hidingShowing"
+Sub Makro6()
+'
+' Hiding / showing the columns of authors, ilustrator etc.
+'
+    Dim stlpce As Range
+    Dim stlpce2 As Range
+    Dim X As String
+     
+    If ActiveSheet.Name = "Knihy_L'uboš" Then
+        Worksheets("Knihy_L'uboš").Activate
+        X = "Knihy_L'uboš"
+    End If
+    If ActiveSheet.Name = "Knihy_Žanetka" Then
+        Worksheets("Knihy_Žanetka").Activate
+        X = "Knihy_Žanetka"
+    End If
+    
+    Set stlpce = ThisWorkbook.Worksheets(X).Range("$B$3:$J$3500")   'select columns of authors
+    Set stlpce2 = ThisWorkbook.Worksheets(X).Range("$L$3:$L$3500")  'and ilustrator
+    
+    If stlpce.EntireColumn.Hidden = False Then  'if they are not hidden,
+        stlpce.EntireColumn.Hidden = True       'hide them and
+        stlpce2.EntireColumn.Hidden = True
+        Worksheets(X).Buttons("Button 5").Caption = "Zobraz ïalšie role"    'change label of button
+    ElseIf stlpce.EntireColumn.Hidden = True Then   'if they are hidden...
+        stlpce.EntireColumn.Hidden = False
+        stlpce2.EntireColumn.Hidden = False
+        Worksheets(X).Buttons("Button 5").Caption = "Skry ïalšie role"
+    End If
+    
+End Sub

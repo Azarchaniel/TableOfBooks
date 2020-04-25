@@ -1,0 +1,48 @@
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_Base = "0{00020819-0000-0000-C000-000000000046}"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Attribute VB_TemplateDerived = False
+Attribute VB_Customizable = True
+Private Sub Workbook_Activate()
+    Application.DisplayAlerts = True
+
+    Dim Int1 As Integer
+    Dim atpvbaenFlag As Boolean
+    atpvbaenFlag = False
+    
+    With ThisWorkbook.VBProject.References
+        For Int1 = 1 To .Count
+            If ThisWorkbook.VBProject.References.Item(Int1).Name = "atpvbaen.xls" Then
+                atpvbaenFlag = True
+            End If
+        Next
+
+        If atpvbaenFlag = False Then
+            If Len(Dir("C:\Program Files\Microsoft Office\Office16\Library\Analysis\atpvbaen.xls")) > 0 Then
+                .AddFromFile ("C:\Program Files\Microsoft Office\Office16\Library\Analysis\atpvbaen.xls")
+            End If
+            If Len(Dir("C:\Program Files\Microsoft Office\Office15\Library\Analysis\atpvbaen.xls")) > 0 Then
+                .AddFromFile ("C:\Program Files\Microsoft Office\Office15\Library\Analysis\atpvbaen.xls")
+            End If
+            If Len(Dir("C:\Program Files (x86)\Microsoft Office\root\Office16\Library\Analysis\atpvbaen.xls")) > 0 Then
+                .AddFromFile ("C:\Program Files (x86)\Microsoft Office\root\Office16\Library\Analysis\atpvbaen.xls")
+            End If
+        End If
+    End With
+        
+End Sub
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    If Len(Dir("D:\Programy\dbklp.ps1")) > 0 Then   'if there is file X, show my custom Exit modal
+        Application.DisplayAlerts = False   'dont show default exit modal
+        vypnutieMsgBox.Show     'show modal
+        Cancel = shouldCancel   'should or shouldnt exit Excel?
+    Else
+        Application.DisplayAlerts = True    'if there isnt file X, show default Exit modal
+    End If
+    
+End Sub
+
