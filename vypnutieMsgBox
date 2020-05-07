@@ -1,5 +1,5 @@
 Attribute VB_Name = "vypnutieMsgBox"
-Attribute VB_Base = "0{30926446-5FBF-40C0-8169-A56B8E0D424F}{607BD7A9-9CDD-4732-AE78-E97BE534FC66}"
+Attribute VB_Base = "0{C0EBEC30-A1CB-4AE2-966E-94D423128F07}{0E06CB50-2C1F-4491-A2BE-33B9FDBA9252}"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True

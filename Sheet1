@@ -6,7 +6,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Attribute VB_TemplateDerived = False
 Attribute VB_Customizable = True
-Attribute VB_Control = "CheckBox1, 18, 0, MSForms, CheckBox"
+Attribute VB_Control = "CheckBox2, 19, 0, MSForms, CheckBox"
+Attribute VB_Control = "CheckBox1, 18, 1, MSForms, CheckBox"
 Option Explicit
 Private alreadyPrompted As Boolean
 

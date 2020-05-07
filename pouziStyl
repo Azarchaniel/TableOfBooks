@@ -42,8 +42,16 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     End If
     
     Dim applyStyle As Boolean
+    Dim i As Integer
 
     applyStyle = False
+    
+    'if CheckBox is True, then force to ApplyStyle
+    If ActiveSheet.CheckBox2.Value = True Then
+        applyStyle = True 'if style is not correct, set flag and exit loop
+        GoTo ApplyStyleMark
+    End If
+    
     For Each sRow In tRng.Rows
         'Im checking, if every other line is grey AND if line+1 is white. If Yes, we do not need to apply style
         'TODO: check the whole row,not just one cell
@@ -51,11 +59,12 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
             If Not (sRow.Interior.TintAndShade < -0.0000000001 And _
             sRow.offset(1, 0).Interior.TintAndShade > -0.0000000001) Then
                 applyStyle = True 'if style is not correct, set flag and exit loop
-                Exit For
+                GoTo ApplyStyleMark
             End If
         End If
     Next sRow
     
+ApplyStyleMark:
     If applyStyle = True Then
         Call TurnOffCalc
         
@@ -212,3 +221,4 @@ Sub Grey()
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
 
 End Sub
+õ\ ¿Â	
