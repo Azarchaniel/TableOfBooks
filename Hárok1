@@ -6,8 +6,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Attribute VB_TemplateDerived = False
 Attribute VB_Customizable = True
-Attribute VB_Control = "CheckBox2, 11, 0, MSForms, CheckBox"
-Attribute VB_Control = "CheckBox1, 9, 1, MSForms, CheckBox"
+Attribute VB_Control = "CheckBox1, 9, 0, MSForms, CheckBox"
+Attribute VB_Control = "CheckBox2, 11, 1, MSForms, CheckBox"
 Option Explicit
 
 Private Sub Worksheet_Change(ByVal Target As Range)

@@ -1,7 +1,5 @@
 Attribute VB_Name = "autoFilling"
 Public Function fillBookByISBN(ISBN As String, address As String)
-'key: cvAALPZ596Xc4Fnrv6pnw
-'secret: QzzB23XpseKhgyfAjkuSci20tct1GjXWR67Noc97SZM 'only for writing
 
     Dim APIkey As String
     Dim APIurl As String
@@ -21,6 +19,7 @@ Public Function fillBookByISBN(ISBN As String, address As String)
             MsgBox "Chyba API: Kniha nebola nájdená"
         Case Else
             MsgBox "Chyba API: Nešpecifikovaná chyba"
+            Debug.Print xmlObj.statusText
         End Select
         Exit Function
     End If
