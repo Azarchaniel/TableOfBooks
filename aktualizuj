@@ -8,7 +8,7 @@ Sub zorad_nazov_autor()
     
     StartTime = Now() 'for checking performance speed
     
-    Call InitProgressBar
+    Call InitProgressBar("hotové")
     If ActiveSheet.Name = "Knihy_L'uboš" Then
         Worksheets("Knihy_L'uboš").Activate
         ws = "Knihy_L'uboš"
@@ -23,13 +23,9 @@ Sub zorad_nazov_autor()
         Worksheets("LP").Activate
         table = "Tabu3"
     End If
-    If ActiveSheet.Name = "Èasopisy" Then
-        Worksheets("Èasopisy").Activate
-        table = "Tabu4"
-    End If
     Range("A1").Select
     
-    Call progressBar(1)
+    Call progressBar(1, "hotové")
     
     Call TurnOffCalc 'to run faster
     'I dont want it to create graphs in LP or magazines sheet
@@ -44,7 +40,7 @@ Sub zorad_nazov_autor()
         Range("$AG:$AG").ClearFormats
         Range("$AG:$AT").Validation.Delete 'clear validation
     End If
-    Call progressBar(2) 'set progress bar to 2
+    Call progressBar(2, "hotové") 'set progress bar to 2
     
     ActiveSheet.ListObjects(table).Sort. _
         SortFields.Clear                    'sort by title
@@ -58,16 +54,14 @@ Sub zorad_nazov_autor()
         .SortMethod = xlPinYin
         .Apply
     End With
-    Call progressBar(15)
+    Call progressBar(15, "hotové")
     ActiveSheet.ListObjects(table).Sort. _
         SortFields.Clear                    'sort by author
-        
-    'magazines doesn't have an author
-    If ActiveSheet.Name <> "Èasopisy" Then
-        ActiveSheet.ListObjects(table).Sort. _
-            SortFields.Add key:=Range(table + "[[#All],[Autor]]"), SortOn:= _
-            xlSortOnValues, Order:=xlAscending, DataOption:=xlSortTextAsNumbers
-    End If
+
+    ActiveSheet.ListObjects(table).Sort. _
+        SortFields.Add key:=Range(table + "[[#All],[Autor]]"), SortOn:= _
+        xlSortOnValues, Order:=xlAscending, DataOption:=xlSortTextAsNumbers
+   
     With ActiveSheet.ListObjects(table).Sort
         .Header = xlYes
         .MatchCase = False
@@ -76,15 +70,16 @@ Sub zorad_nazov_autor()
         .Apply
     End With
     
-    Call progressBar(30)
+    Call progressBar(30, "hotové")
     Call TurnOnCalc
     ActiveSheet.Calculate 'recalculate formulas
-    Call progressBar(35)
+    Call progressBar(35, "hotové")
     Call tlacitko_prvy_zaznam
-    Call progressBar(40)
+    Call progressBar(40, "hotové")
     Call applyStyle
-    Call progressBar(99)
+    Call progressBar(99, "hotové")
     Application.ErrorCheckingOptions.BackgroundChecking = False 'I dont care about warnings like "wrong format"
+    Range("A4").Select
     Range("A1").Select
     Unload Progress 'hide progression modal
     finTime = Now()    'for checking performance speed
@@ -95,137 +90,4 @@ End Sub
 
 Sub clearStatusBar()
     Application.StatusBar = False
-End Sub
-     STflag = False
-        End If
-    End If
-End Sub
-
-'following code contain functions for setting styles such as colors, lines, bold text etc
-Sub Grey()
-    With Selection
-        .HorizontalAlignment = xlCenter
-        .VerticalAlignment = xlCenter
-    End With
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = -0.149998474074526
-        .PatternTintAndShade = 0
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlInsideVertical).LineStyle = xlNone
-    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
-    End Sub
-    
-    Sub White()
-    With Selection
-        .HorizontalAlignment = xlCenter
-        .VerticalAlignment = xlCenter
-    End With
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = 0
-        .PatternTintAndShade = 0
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideHorizontal)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
-
 End Sub

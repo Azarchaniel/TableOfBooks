@@ -1,21 +1,21 @@
 Attribute VB_Name = "postup"
 Option Explicit
 
-Sub InitProgressBar()
+Sub InitProgressBar(label As String)
 
-With Progress
-    .Bar.Width = 0
-    .Text.Caption = "0% hotové"
-    .Show vbModeless
-End With
+    With Progress
+        .Bar.Width = 0
+        .Text.Caption = "0% "
+        .Show vbModeless
+    End With
 
 End Sub
 
-Sub progressBar(CurrentProgress As Integer)
+Sub progressBar(CurrentProgress As Integer, label As String)
 
-Progress.Bar.Width = Progress.Border.Width * CurrentProgress * 0.01
-Progress.Text.Caption = CurrentProgress & "% hotové"
-
-DoEvents
+    Progress.Bar.Width = Progress.Border.Width * CurrentProgress * 0.01
+    Progress.Text.Caption = CurrentProgress & "% " & label
+    
+    DoEvents
 
 End Sub

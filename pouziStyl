@@ -15,14 +15,24 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         Worksheets("Knihy_L'uboš").Activate
         Set wRng1 = Range("A4:AF4")
         Set wRng2 = Range("A5:AF5")
-        Set tRng = Range("A4:A2500")
+        ActiveSheet.Range("$N$2499").Select
+        If (Selection.End(xlUp).row < 2450) Then
+            Set tRng = Range("A4:A" & Selection.End(xlUp).row + 50)
+        Else
+            Set tRng = Range("A4:A" & Selection.End(xlUp).row)
+        End If
         offset = 31
     End If
     If ActiveSheet.Name = "Knihy_Žanetka" Then
         Worksheets("Knihy_Žanetka").Activate
         Set wRng1 = Range("A4:AF4")
         Set wRng2 = Range("A5:AF5")
-        Set tRng = Range("A4:A2500")
+        ActiveSheet.Range("$N$2499").Select
+        If (Selection.End(xlUp).row < 2450) Then
+            Set tRng = Range("A4:A" & Selection.End(xlUp).row + 50)
+        Else
+            Set tRng = Range("A4:A" & Selection.End(xlUp).row)
+        End If
         offset = 31
     End If
     If ActiveSheet.Name = "LP" Then
@@ -32,59 +42,52 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         Set tRng = Range("A4:A500")
         offset = 11
     End If
-    If ActiveSheet.Name = "Èasopisy" Then
-        Worksheets("Èasopisy").Activate
-        Set wRng1 = Range("A4:H4")
-        Set wRng2 = Range("A5:H5")
-        Set tRng = Range("A4:A500")
-        offset = 7
-    End If
     
     Dim applyStyle As Boolean
     Dim i As Integer
 
     applyStyle = False
-    
     'if CheckBox is True, then force to ApplyStyle
     If ActiveSheet.CheckBox2.Value = True Then
         applyStyle = True
-        GoTo ApplyStyleMark
-    End If
-    
-    For Each sRow In tRng.Rows
-        'Im checking, if every other line is grey AND if line+1 is white. If Yes, we do not need to apply style
-        'TODO: check the whole row,not just one cell
-        If sRow.row Mod 2 = 0 Then
-            If Not (sRow.Interior.TintAndShade < -0.0000000001 And _
-            sRow.offset(1, 0).Interior.TintAndShade > -0.0000000001) Then
-                applyStyle = True 'if style is not correct, set flag and exit loop
-                GoTo ApplyStyleMark
+    Else
+        For Each sRow In tRng.Rows
+            DoEvents
+            'Im checking, if every other line is grey AND if line+1 is white. If Yes, we do not need to apply style
+            'TODO: check the whole row,not just one cell
+            If sRow.row Mod 2 = 0 Then
+                If Not (sRow.Interior.TintAndShade < -0.0000000001 And sRow.offset(1, 0).Interior.TintAndShade > -0.0000000001) Then
+                    applyStyle = True 'if style is not correct, set flag and exit loop
+                    Exit For
+                End If
             End If
-        End If
-    Next sRow
-    
-ApplyStyleMark:
+        Next sRow
+    End If
+
     If applyStyle = True Then
         Call TurnOffCalc
-        
+
         wRng1.Select
         Call Grey   'apply Grey style
         wRng1.Copy  'copy whole row
-        Call progressBar(41)    'set progress bar to 41 perc.
+        Call progressBar(41, "hotové")    'set progress bar to 41 perc.
         For Each row In tRng.Rows
+            DoEvents
             checkStrikeAndApplyStyle row, offset, 0
         Next row
-        
-        Call progressBar(70)
-        
+
+        Call progressBar(70, "hotové")
+
         wRng2.Select
         Call White
         wRng2.Copy
         For Each row In tRng.Rows
+            DoEvents
            checkStrikeAndApplyStyle row, offset, 1
         Next row
-        Call progressBar(98)
+        Call progressBar(98, "hotové")
         Call TurnOnCalc
+        Call tlacitko_prvy_zaznam
     End If
 End Sub
 
@@ -98,14 +101,14 @@ Sub checkStrikeAndApplyStyle(row As Range, offset As Integer, modulo As Integer)
         Range(row, row.offset(0, offset)).PasteSpecial Paste:=xlPasteFormats  'for every second row, paste formats
         If STflag = True Then
             Range(row, row.offset(0, offset)).Font.Strikethrough = True
-IncreaseOffsetMark:
+
             'if row-2 is again striked, -2 again
-            If Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Font.Strikethrough = True Then
+            While Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Font.Strikethrough = True
+                DoEvents
                 newOffset = newOffset - 2
-                GoTo IncreaseOffsetMark
-            Else
-                Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Copy
-            End If
+            Wend
+
+            Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Copy
             STflag = False
         End If
     End If
@@ -153,7 +156,7 @@ Sub Grey()
     Selection.Borders(xlInsideVertical).LineStyle = xlNone
     Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
     End Sub
-    
+
     Sub White()
     With Selection
         .HorizontalAlignment = xlCenter

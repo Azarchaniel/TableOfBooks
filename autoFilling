@@ -1,6 +1,5 @@
 Attribute VB_Name = "autoFilling"
-Public Function fillBookByISBN(ISBN As String, address As String)
-
+Public Function fillBookByISBN(ISBN As String, currentRow As String)
     Dim APIkey As String
     Dim APIurl As String
     Dim xmlObj As MSXML2.XMLHTTP60
@@ -15,11 +14,11 @@ Public Function fillBookByISBN(ISBN As String, address As String)
     
     If xmlObj.statusText <> "OK" Then
         Select Case xmlObj.statusText
-        Case "Not Found"
-            MsgBox "Chyba API: Kniha nebola nájdená"
-        Case Else
-            MsgBox "Chyba API: Nešpecifikovaná chyba"
-            Debug.Print xmlObj.statusText
+            Case "Not Found"
+                MsgBox "Chyba API: Kniha nebola nájdená"
+            Case Else
+                MsgBox "Chyba API: Nešpecifikovaná chyba"
+                Debug.Print xmlObj.statusText
         End Select
         Exit Function
     End If
@@ -42,21 +41,20 @@ Public Function fillBookByISBN(ISBN As String, address As String)
     Dim language As String
     Dim yearTemp As String
     Dim year As Integer
-    Dim roleTemp As String
     
     Set xNodes = xDoc.SelectNodes("//GoodreadsResponse/book/authors/author")
-    
-    Dim IterAuthor As Integer
-    IterAuthor = 1
+    Dim temp As String
      
     For Each xNode In xNodes
-        roleTemp = xNode.SelectSingleNode("role").Text
-        If Len(roleTemp) = 0 Then
-            author(IterAuthor) = switchNames(xNode.SelectSingleNode("name").Text)
-            IterAuthor = IterAuthor + 1
-        End If
-
-        Select Case roleTemp
+        Select Case xNode.SelectSingleNode("role").Text
+            Case ""
+                Dim IterAuthor: IterAuthor = 1
+                If (Len(author(IterAuthor)) > 1) Then
+                    IterAuthor = IterAuthor + 1
+                    author(IterAuthor) = switchNames(xNode.SelectSingleNode("name").Text)
+                Else
+                    author(IterAuthor) = switchNames(xNode.SelectSingleNode("name").Text)
+                End If
             Case "Translator"
                 If Len(translator) > 1 Then
                     translator = translator & "; " & switchNames(xNode.SelectSingleNode("name").Text)
@@ -90,31 +88,24 @@ Public Function fillBookByISBN(ISBN As String, address As String)
             language = ""
     End Select
     
-    Dim newAddress As Range
-    Set newAddress = Range("A1").offset(address - 1, 0)
+    Call TurnOffCalc
     
-    newAddress.offset(0, 0).Value = author(1)
-    newAddress.offset(0, 1).Value = author(2)
-    newAddress.offset(0, 2).Value = author(3)
-    newAddress.offset(0, 3).Value = author(4)
-    newAddress.offset(0, 4).Value = author(5)
-    newAddress.offset(0, 5).Value = author(6)
-    newAddress.offset(0, 6).Value = author(7)
-    newAddress.offset(0, 7).Value = author(8)
-    newAddress.offset(0, 8).Value = author(9)
-    newAddress.offset(0, 9).Value = author(10)
-    newAddress.offset(0, 11).Value = ilustrator
-    newAddress.offset(0, 12).Value = translator
-    newAddress.offset(0, 13).Value = title
-    newAddress.offset(0, 20).Value = publisher
-    newAddress.offset(0, 21).Value = year
-    newAddress.offset(0, 22).Value = language
-    newAddress.offset(0, 31).Value = Format(Date, "d.m.yyyy")
+    For i = 1 To 10
+        Cells(currentRow, i) = author(i)
+    Next i
+    Cells(currentRow, 12) = ilustrator
+    Cells(currentRow, 13) = translator
+    Cells(currentRow, 14) = title
+    Cells(currentRow, 21) = publisher
+    Cells(currentRow, 22) = year
+    Cells(currentRow, 23) = language
+    Cells(currentRow, 32) = Format(Date, "d.m.yyyy")
     
+    
+    Call TurnOnCalc
 End Function
 
 Private Function switchNames(meno As String)
-    Dim wordlist As String
     Dim arrayOfWords
     Dim length As Integer
     Dim menoTemp As String
@@ -129,3 +120,6 @@ Private Function switchNames(meno As String)
     switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
 End Function
 
+Private Function splitAuthors(authors As String)
+    splitAuthors = Split(authors, ", ")
+End Function

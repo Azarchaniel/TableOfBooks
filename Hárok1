@@ -27,7 +27,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
         If Not Intersect(Target, cell) Is Nothing Then
             If CheckBox1.Value = True Then
                 ISBN = VBA.Replace(cell.Value, "-", "")
-                If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and text at least 5 chars
+                If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
                     fillBookByISBN ISBN, cell.row 'multiple arguments has to be without ()
                 End If
             End If
