@@ -1,0 +1,13 @@
+Attribute VB_Name = "Count_strikethrough"
+Public Function CountStrike(pWorkRng As Range) As Long
+    Application.Volatile
+    Dim pRng As Range
+    Dim xOut As Long
+    xOut = 0
+    For Each pRng In pWorkRng
+        If pRng.Font.Strikethrough Then
+            xOut = xOut + 1
+        End If
+    Next
+    CountStrike = xOut
+End Function
