@@ -1,5 +1,6 @@
 Attribute VB_Name = "autoFilling"
 Public Function fillBookByISBN(ISBN As String, currentRow As String)
+    Application.StatusBar = "Volam GoodReads"
     Dim APIkey As String
     Dim APIurl As String
     Dim xmlObj As MSXML2.XMLHTTP60
@@ -15,11 +16,11 @@ Public Function fillBookByISBN(ISBN As String, currentRow As String)
     If xmlObj.statusText <> "OK" Then
         Select Case xmlObj.statusText
             Case "Not Found"
-                MsgBox "Chyba API: Kniha nebola nájdená"
-            Case Else
-                MsgBox "Chyba API: Nešpecifikovaná chyba"
-                Debug.Print xmlObj.statusText
+                Debug.Print "Chyba API: Kniha nebola nájdená"
+                Application.StatusBar = "Chyba API: Kniha nebola nájdená"
+                Application.OnTime Now + TimeValue("00:00:05"), "clearStatusBar"    'after five seconds, clear status bar
         End Select
+        fillBookByISBN = False
         Exit Function
     End If
     
@@ -101,11 +102,12 @@ Public Function fillBookByISBN(ISBN As String, currentRow As String)
     Cells(currentRow, 23) = language
     Cells(currentRow, 32) = Format(Date, "d.m.yyyy")
     
-    
     Call TurnOnCalc
+    Application.StatusBar = False
+    fillBookByISBN = True
 End Function
 
-Private Function switchNames(meno As String)
+Public Function switchNames(meno As String)
     Dim arrayOfWords
     Dim length As Integer
     Dim menoTemp As String
@@ -118,8 +120,4 @@ Private Function switchNames(meno As String)
 
     'for Return, you have to assing value to the name of a function
     switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
-End Function
-
-Private Function splitAuthors(authors As String)
-    splitAuthors = Split(authors, ", ")
 End Function

@@ -1,5 +1,5 @@
 Attribute VB_Name = "Progress"
-Attribute VB_Base = "0{16902C17-BA92-4558-A27E-93ADF46D9C25}{3747CFAF-7D8A-478A-AE07-33BFD604065C}"
+Attribute VB_Base = "0{8E35D592-FC18-454F-9360-D2C31FA1AA24}{140C9E30-050A-48AA-BBE4-828A7C78A9F0}"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True

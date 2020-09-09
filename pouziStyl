@@ -4,241 +4,106 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
 '
 ' ApplyStyle Makro
 '
-    Dim wRng1 As Range 'working range
-    Dim wRng2 As Range
     Dim tRng As Range   'total range
     Dim row As Range
-    Dim offset As Integer
+    Dim tabulka As String
+    Dim nazev As Range
+    Dim exLibris As Range
+    Dim datum As Range
     'every sheet is slightly different, so I have to adjust settings
     
     If ActiveSheet.Name = "Knihy_L'uboš" Then
         Worksheets("Knihy_L'uboš").Activate
-        Set wRng1 = Range("A4:AF4")
-        Set wRng2 = Range("A5:AF5")
-        ActiveSheet.Range("$N$2499").Select
-        If (Selection.End(xlUp).row < 2450) Then
-            Set tRng = Range("A4:A" & Selection.End(xlUp).row + 50)
-        Else
-            Set tRng = Range("A4:A" & Selection.End(xlUp).row)
-        End If
-        offset = 31
+        tabulka = "Tabu1"
+        Set nazev = Range("A4:A2500,N4:N2500")
+        Set exLibris = Range("X4:Y2500,AD4:AD2500")
+        Set datum = Range("AF4:AF2500")
+        Set tRng = Range("A4:AF2500")
     End If
     If ActiveSheet.Name = "Knihy_Žanetka" Then
         Worksheets("Knihy_Žanetka").Activate
-        Set wRng1 = Range("A4:AF4")
-        Set wRng2 = Range("A5:AF5")
-        ActiveSheet.Range("$N$2499").Select
-        If (Selection.End(xlUp).row < 2450) Then
-            Set tRng = Range("A4:A" & Selection.End(xlUp).row + 50)
-        Else
-            Set tRng = Range("A4:A" & Selection.End(xlUp).row)
-        End If
-        offset = 31
+        tabulka = "Tabu2"
+        Set nazev = Range("A4:A2500,N4:N2500")
+        Set exLibris = Range("X4:Y2500,AD4:AD2500")
+        Set datum = Range("AF4:AF2500")
+        Set tRng = Range("A4:AF2500")
+        Set tRng = Range("A4:A2500")
     End If
     If ActiveSheet.Name = "LP" Then
         Worksheets("LP").Activate
-        Set wRng1 = Range("A4:L4")
-        Set wRng2 = Range("A5:L5")
+        tabulka = "Tabu3"
+        Set nazev = Range("A4:B500")
+        Set exLibris = Range("A1")
+        Set datum = Range("L4:L500")
         Set tRng = Range("A4:A500")
-        offset = 11
     End If
     
-    Dim applyStyle As Boolean
-    Dim i As Integer
-
-    applyStyle = False
-    'if CheckBox is True, then force to ApplyStyle
-    If ActiveSheet.CheckBox2.Value = True Then
-        applyStyle = True
-    Else
-        For Each sRow In tRng.Rows
-            DoEvents
-            'Im checking, if every other line is grey AND if line+1 is white. If Yes, we do not need to apply style
-            'TODO: check the whole row,not just one cell
-            If sRow.row Mod 2 = 0 Then
-                If Not (sRow.Interior.TintAndShade < -0.0000000001 And sRow.offset(1, 0).Interior.TintAndShade > -0.0000000001) Then
-                    applyStyle = True 'if style is not correct, set flag and exit loop
-                    Exit For
-                End If
-            End If
-        Next sRow
-    End If
-
-    If applyStyle = True Then
-        Call TurnOffCalc
-
-        wRng1.Select
-        Call Grey   'apply Grey style
-        wRng1.Copy  'copy whole row
-        Call progressBar(41, "hotové")    'set progress bar to 41 perc.
-        For Each row In tRng.Rows
-            DoEvents
-            checkStrikeAndApplyStyle row, offset, 0
-        Next row
-
-        Call progressBar(70, "hotové")
-
-        wRng2.Select
-        Call White
-        wRng2.Copy
-        For Each row In tRng.Rows
-            DoEvents
-           checkStrikeAndApplyStyle row, offset, 1
-        Next row
-        Call progressBar(98, "hotové")
-        Call TurnOnCalc
-        Call tlacitko_prvy_zaznam
-    End If
-End Sub
-
-Sub checkStrikeAndApplyStyle(row As Range, offset As Integer, modulo As Integer)
-    Dim STflag As Boolean
-    Dim newOffset As Integer: newOffset = -2
-    If row.row Mod 2 = modulo Then
-        If row.Font.Strikethrough And Not (IsEmpty(row)) Then
-            STflag = True
+    Call TurnOffCalc
+    Dim strikeRange As String
+    For Each row In Range("N4:N2500")
+        If row.Font.Strikethrough = True Then
+            strikeRange = strikeRange + "A" + CStr(row.row) + ":AF" + CStr(row.row) + ","
         End If
-        Range(row, row.offset(0, offset)).PasteSpecial Paste:=xlPasteFormats  'for every second row, paste formats
-        If STflag = True Then
-            Range(row, row.offset(0, offset)).Font.Strikethrough = True
-
-            'if row-2 is again striked, -2 again
-            While Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Font.Strikethrough = True
-                DoEvents
-                newOffset = newOffset - 2
-            Wend
-
-            Range(row.offset(newOffset, 0), row.offset(newOffset, offset)).Copy
-            STflag = False
-        End If
+    Next row
+    Call progressBar(41, "hotové")    'set progress bar to 41 perc.
+    tRng.ClearFormats
+    ActiveSheet.ListObjects(tabulka).TableStyle = "TableStyleMedium1"
+    nazev.Font.Bold = True
+    exLibris.Font.Name = "Webdings"
+    datum.NumberFormat = "d.m.yyyy"
+    If Len(strikeRange) > 0 Then
+        strikeRange = Left(strikeRange, Len(strikeRange) - 1)
+        Range(strikeRange).Font.Strikethrough = True
     End If
-End Sub
-
-'following code contain functions for setting styles such as colors, lines, bold text etc
-Sub Grey()
-    With Selection
+    With tRng
+        .WrapText = True
         .HorizontalAlignment = xlCenter
         .VerticalAlignment = xlCenter
     End With
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = -0.149998474074526
-        .PatternTintAndShade = 0
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
+    Call progressBar(98, "hotové")
+    Call TurnOnCalc
+    Call tlacitko_prvy_zaznam
+End Sub
+   End With
+    With Selection.Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
+        .Weight = xlThin
+    End With
+    Range("$AH$25:$AI$25").Select
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    
+    Range("$AH$27:$AI$27").Select
+    Range("$AH$27:$AI$27").HorizontalAlignment = xlLeft
+    With Selection.Borders(xlEdgeTop)
+        .LineStyle = xlContinuous
+        .Weight = xlMedium
+    End With
+    With Selection.Borders(xlEdgeBottom)
+        .LineStyle = xlContinuous
         .Weight = xlThin
     End With
     With Selection.Borders(xlEdgeTop)
         .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
+        .Weight = xlMedium
     End With
     With Selection.Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
         .Weight = xlThin
     End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ThemeColor = 2
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlInsideVertical).LineStyle = xlNone
-    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
-    End Sub
-
-    Sub White()
-    With Selection
-        .HorizontalAlignment = xlCenter
-        .VerticalAlignment = xlCenter
-    End With
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = 0
-        .PatternTintAndShade = 0
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
+    Range("$AH$36:$AI$36").Select
     With Selection.Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
+        .Weight = xlMedium
     End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideHorizontal)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-        .ColorIndex = 0
-        .TintAndShade = 0
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-        .ThemeColor = 1
-        .TintAndShade = -0.149998474074526
-        .Weight = xlThin
-    End With
-    Selection.Borders(xlInsideHorizontal).LineStyle = xlNone
+    
+    'set alignment
+    Range("$AH$17:$AI$25").HorizontalAlignment = xlRight
+    Range("$AH$28:$AI$36").HorizontalAlignment = xlRight
+    Range("$AH$17:$AI$25").VerticalAlignment = xlBottom
+    Range("$AH$28:$AI$36").VerticalAlignment = xlBottom
 
 End Sub
+

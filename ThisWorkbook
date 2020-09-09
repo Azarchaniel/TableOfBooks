@@ -23,12 +23,13 @@ Private Sub Workbook_Activate()
         If atpvbaenFlag = False Then
             If Len(Dir("C:\Program Files\Microsoft Office\Office16\Library\Analysis\atpvbaen.xls")) > 0 Then
                 .AddFromFile ("C:\Program Files\Microsoft Office\Office16\Library\Analysis\atpvbaen.xls")
-            End If
-            If Len(Dir("C:\Program Files\Microsoft Office\Office15\Library\Analysis\atpvbaen.xls")) > 0 Then
+            ElseIf Len(Dir("C:\Program Files\Microsoft Office\Office15\Library\Analysis\atpvbaen.xls")) > 0 Then
                 .AddFromFile ("C:\Program Files\Microsoft Office\Office15\Library\Analysis\atpvbaen.xls")
-            End If
-            If Len(Dir("C:\Program Files (x86)\Microsoft Office\root\Office16\Library\Analysis\atpvbaen.xls")) > 0 Then
+            ElseIf Len(Dir("C:\Program Files (x86)\Microsoft Office\root\Office16\Library\Analysis\atpvbaen.xls")) > 0 Then
                 .AddFromFile ("C:\Program Files (x86)\Microsoft Office\root\Office16\Library\Analysis\atpvbaen.xls")
+            ElseIf Len(Dir("D:\Dokumenty\totoJeATPVBAEN.xlam")) > 0 Then
+                .AddFromFile ("D:\Dokumenty\totoJeATPVBAEN.xlam")
+            Else: MsgBox "Neviem nájs atpvbaen.xls. Skontroluj, èi máš zapnuté Developer -> Excel Add-ins -> Analysis Tool Pack"
             End If
         End If
     End With

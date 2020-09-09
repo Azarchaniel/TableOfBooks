@@ -6,4 +6,3 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Attribute VB_TemplateDerived = False
 Attribute VB_Customizable = True
-Attribute VB_Control = "CheckBox1, 10, 0, MSForms, CheckBox"
