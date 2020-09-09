@@ -1,0 +1,128 @@
+Attribute VB_Name = "webScrapper"
+Public Function scrapWeb(ISBN As String, currentRow As String)
+    Application.StatusBar = "Volam DatabKnih"
+    Dim title As String
+    Dim arrayOfAuthors(0 To 9) As String
+    Dim translator As String
+    'Dim editor As String
+    Dim ilustrator As String
+    Dim publisher As String
+    Dim language As String
+    Dim yearTemp As String
+    Dim year As Integer
+    Dim foundFlag As Boolean: foundFlag = True
+    
+    Set objIE = CreateObject("InternetExplorer.Application")
+    objIE.Visible = False
+    objIE.Navigate ("https://www.databazeknih.cz/search?q=" & ISBN)
+    
+    Do
+    DoEvents
+    Loop Until objIE.readyState = 4
+    
+    For Each h1 In objIE.document.getElementsByTagName("h1")
+            If InStr(h1.innerHTML, "Vyhledávání") Then
+                foundFlag = False
+            End If
+    Next h1
+
+    If foundFlag = True Then
+        For Each aHref In objIE.document.getElementsByTagName("a")
+            If aHref = "https://www.databazeknih.cz/?show=binfo" Or InStr(aHref.innerText, "...zobrazit vše") Then
+                aHref.Click
+            End If
+        Next aHref
+        For Each aHref In objIE.document.getElementsByTagName("a")
+            If InStr(aHref, "nakladatelstvi/") Then
+'                Debug.Print aHref.innerText
+                publisher = aHref.innerText
+            End If
+            If InStr(aHref, "prekladatele/") Then
+'                Debug.Print aHref.innerText
+                translator = switchNames(aHref.innerText)
+            End If
+            If InStr(aHref, "ilustratori/") Then
+'                Debug.Print aHref.innerText
+                ilustrator = switchNames(aHref.innerText)
+            End If
+        Next aHref
+        
+        For Each h1 In objIE.document.getElementsByTagName("h1")
+            If InStr(h1.outerHTML, "name") Then
+'                Debug.Print h1.innerText
+                title = h1.innerText
+            End If
+        Next h1
+        For Each td In objIE.document.getElementsByTagName("td")
+            If InStr(td.outerHTML, "language") Then
+                language = td.innerText
+            End If
+            If InStr(td.outerHTML, "datePublished") Then
+                yearTemp = td.all.Item(0).innerHTML
+                If Len(yearTemp) > 0 And IsNumeric(yearTemp) Then
+                    year = CInt(yearTemp)
+                End If
+'                Debug.Print year
+            End If
+        Next td
+        
+        Dim autorTemp As String
+        Dim arrayOfAllNames
+        
+        For Each span In objIE.document.getElementsByTagName("span")
+            If InStr(span.innerHTML, "autori") > 0 Then
+                autorTemp = CStr(span.innerText)
+                Exit For
+            End If
+        Next span
+        
+        arrayOfAllNames = Split(autorTemp, ",")
+        
+        Dim length As Integer
+        length = UBound(arrayOfAllNames) - LBound(arrayOfAllNames) + 1
+        Dim i As Integer
+        For i = 0 To length - 1
+            arrayOfAuthors(i) = switchNames(Trim(arrayOfAllNames(i)))
+        Next i
+'        Debug.Print arrayOfAuthors(0)
+        
+        Select Case language
+            Case "slovenský"
+                language = "sk"
+            Case "èeský"
+                language = "cz"
+            Case "anglický"
+                language = "en"
+            Case Else
+                language = ""
+        End Select
+'        Debug.Print language
+        
+        objIE.Quit
+        Set objIE = Nothing
+    
+        Call TurnOffCalc
+        
+        For i = 0 To length - 1
+            Cells(currentRow, i + 1) = arrayOfAuthors(i)
+        Next i
+        Cells(currentRow, 12) = ilustrator
+        Cells(currentRow, 13) = translator
+        Cells(currentRow, 14) = title
+        Cells(currentRow, 21) = publisher
+        Cells(currentRow, 22) = year
+        Cells(currentRow, 23) = language
+        Cells(currentRow, 32) = Format(Date, "d.m.yyyy")
+        
+        Call TurnOnCalc
+        scrapWeb = True
+    Else
+        Application.StatusBar = "Kniha nebola nájdená, alebo je viacero verzií."
+        Application.OnTime Now + TimeValue("00:00:05"), "clearStatusBar"    'after five seconds, clear status bar
+        scrapWeb = False
+    End If
+    Application.StatusBar = False
+End Function
+on
+    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
+End Function
