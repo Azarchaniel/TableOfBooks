@@ -121,3 +121,4 @@ Public Function switchNames(meno As String)
     'for Return, you have to assing value to the name of a function
     switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
 End Function
+€on€v u‚p…vneare

@@ -11,11 +11,3 @@ If ActiveSheet.Name = "LP" Then
     ActiveSheet.Range("$B$4").Select
 End If
 End Sub
- last row
-    Selection.End(xlUp).offset(1, 0).Select          'then go up to the nearest value and go one row down
-End If
-If ActiveSheet.Name = "LP" Then
-    ActiveSheet.Range("$B$499").Select
-    Selection.End(xlUp).offset(1, 0).Select
-End If
-End Sub

@@ -20,9 +20,6 @@ Sub progressBar(CurrentProgress As Integer, label As String)
 
 End Sub
  As Range
-    Dim ISBN As String
-    Dim DBKsuccess As Boolean
-    Dim GRsuccess As Boolean
     
     For Each cell In Range("AF4:AF2500")
         If Not Intersect(Target, cell) Is Nothing Then
@@ -36,17 +33,7 @@ End Sub
     For Each cell In Range("T4:T2500")
         If Not Intersect(Target, cell) Is Nothing Then
             If CheckBox1.Value = True Then
-                ISBN = VBA.Replace(cell.Value, "-", "")
-                If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
-                    DBKsuccess = scrapWeb(ISBN, cell.row)
-                    Debug.Print DBKsuccess
-                    If DBKsuccess = False Then
-                        GRsuccess = fillBookByISBN(ISBN, cell.row)
-                    End If
-                    If (DBKsuccess = False And GRsuccess = False) Then
-                        MsgBox "Chyba API: Kniha nebola nájdená"
-                    End If
-                End If
+                autoFill cell
             End If
         End If
     Next cell

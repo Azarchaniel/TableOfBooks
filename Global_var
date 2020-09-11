@@ -1,7 +1,21 @@
 Attribute VB_Name = "Global_var"
 Global shouldCancel As Boolean
 
-Public Sub Global_var()
-
-End Sub
+Public Function autoFill(cell As Range)
+    Dim ISBN As String
+    Dim DBKsuccess As Boolean
+    Dim GRsuccess As Boolean
+    
+    ISBN = VBA.Replace(cell.Value, "-", "")
+    If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
+        DBKsuccess = scrapWeb(ISBN, cell.row)
+        Debug.Print DBKsuccess
+        If DBKsuccess = False Then
+            GRsuccess = fillBookByISBN(ISBN, cell.row)
+        End If
+        If (DBKsuccess = False And GRsuccess = False) Then
+            MsgBox "Chyba API: Kniha nebola nájdená"
+        End If
+    End If
+End Function
 

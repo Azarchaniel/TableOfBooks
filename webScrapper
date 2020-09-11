@@ -123,6 +123,3 @@ Public Function scrapWeb(ISBN As String, currentRow As String)
     End If
     Application.StatusBar = False
 End Function
-on
-    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
-End Function

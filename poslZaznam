@@ -14,3 +14,9 @@ If ActiveSheet.Name = "LP" Then
     Selection.End(xlUp).offset(1, 0).Select
 End If
 End Sub
+Rsuccess = False) Then
+            MsgBox "Chyba API: Kniha nebola nájdená"
+        End If
+    End If
+End Function
+
