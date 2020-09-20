@@ -19,22 +19,3 @@ Sub progressBar(CurrentProgress As Integer, label As String)
     DoEvents
 
 End Sub
- As Range
-    
-    For Each cell In Range("AF4:AF2500")
-        If Not Intersect(Target, cell) Is Nothing Then
-            If cell.Value = "Dnes" Or cell.Value = "dnes" Or cell.Value = "d" Then
-                cell.Value = Format(Date, "d.m.yyyy")
-            End If
-        End If
-    Next cell
-    ActiveSheet.Calculate
-    
-    For Each cell In Range("T4:T2500")
-        If Not Intersect(Target, cell) Is Nothing Then
-            If CheckBox1.Value = True Then
-                autoFill cell
-            End If
-        End If
-    Next cell
-End Sub

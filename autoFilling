@@ -14,12 +14,6 @@ Public Function fillBookByISBN(ISBN As String, currentRow As String)
     xmlObj.Send
     
     If xmlObj.statusText <> "OK" Then
-        Select Case xmlObj.statusText
-            Case "Not Found"
-                Debug.Print "Chyba API: Kniha nebola nájdená"
-                Application.StatusBar = "Chyba API: Kniha nebola nájdená"
-                Application.OnTime Now + TimeValue("00:00:05"), "clearStatusBar"    'after five seconds, clear status bar
-        End Select
         fillBookByISBN = False
         Exit Function
     End If
@@ -106,19 +100,3 @@ Public Function fillBookByISBN(ISBN As String, currentRow As String)
     Application.StatusBar = False
     fillBookByISBN = True
 End Function
-
-Public Function switchNames(meno As String)
-    Dim arrayOfWords
-    Dim length As Integer
-    Dim menoTemp As String
-    
-    arrayOfWords = Split(meno, " ")
-    length = UBound(arrayOfWords) - LBound(arrayOfWords) + 1
-    For i = 0 To length - 2
-        menoTemp = menoTemp & " " & arrayOfWords(i)
-    Next i
-
-    'for Return, you have to assing value to the name of a function
-    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
-End Function
-€on€v u‚p…vneare

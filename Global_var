@@ -9,7 +9,6 @@ Public Function autoFill(cell As Range)
     ISBN = VBA.Replace(cell.Value, "-", "")
     If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
         DBKsuccess = scrapWeb(ISBN, cell.row)
-        Debug.Print DBKsuccess
         If DBKsuccess = False Then
             GRsuccess = fillBookByISBN(ISBN, cell.row)
         End If
@@ -19,3 +18,17 @@ Public Function autoFill(cell As Range)
     End If
 End Function
 
+Public Function switchNames(meno As String)
+    Dim arrayOfWords
+    Dim length As Integer
+    Dim menoTemp As String
+    
+    arrayOfWords = Split(meno, " ")
+    length = UBound(arrayOfWords) - LBound(arrayOfWords) + 1
+    For i = 0 To length - 2
+        menoTemp = menoTemp & " " & arrayOfWords(i)
+    Next i
+
+    'for Return, you have to assing value to the name of a function
+    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
+End Function

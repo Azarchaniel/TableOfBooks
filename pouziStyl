@@ -27,7 +27,7 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         Set exLibris = Range("X4:Y2500,AD4:AD2500")
         Set datum = Range("AF4:AF2500")
         Set tRng = Range("A4:AF2500")
-        Set tRng = Range("A4:A2500")
+        Set tRng = Range("A4:AF2500")
     End If
     If ActiveSheet.Name = "LP" Then
         Worksheets("LP").Activate
@@ -64,46 +64,3 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     Call TurnOnCalc
     Call tlacitko_prvy_zaznam
 End Sub
-   End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlThin
-    End With
-    Range("$AH$25:$AI$25").Select
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlMedium
-    End With
-    
-    Range("$AH$27:$AI$27").Select
-    Range("$AH$27:$AI$27").HorizontalAlignment = xlLeft
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .Weight = xlMedium
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlThin
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-        .Weight = xlMedium
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlThin
-    End With
-    Range("$AH$36:$AI$36").Select
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-        .Weight = xlMedium
-    End With
-    
-    'set alignment
-    Range("$AH$17:$AI$25").HorizontalAlignment = xlRight
-    Range("$AH$28:$AI$36").HorizontalAlignment = xlRight
-    Range("$AH$17:$AI$25").VerticalAlignment = xlBottom
-    Range("$AH$28:$AI$36").VerticalAlignment = xlBottom
-
-End Sub
-
