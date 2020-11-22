@@ -1,5 +1,21 @@
 Attribute VB_Name = "Global_var"
 Global shouldCancel As Boolean
+Global Const DATE_RANGE As String = "AF4:AF2500"
+Global Const ISBN_RANGE As String = "T4:T2500"
+Global Const GRAPH_RANGE As String = "AK16:AR36"
+Global Const GRAPH_RANGE_PLUS_ONE As String = "AJ15:AR37"
+Global Const FUCKING_COLUMN As String = "AH:AH"
+Global Const FUCKING_COLUMN_PLUS_ONE As String = "AH:AU"
+Global Const AUTHORS_COLUMN As String = "B3:J3500"
+Global Const HEIGTH_COLUMN As String = "AA4:AA2500"
+Global Const WIDTH_COLUMN As String = "AB4:AB2500"
+Global Const TITLE_COLUMN As String = "N4:N2500"
+Global Const ILUSTRATOR_COLUMN As String = "L3:L3500"
+Global Const STYLE_BOLD As String = "A4:A2500,N4:N2500"
+Global Const STYLE_WEBDINGS As String = "X4:Y2500,AE4:AE2500"
+Global Const STYLE_NUMBER As String = "AA4:AC2500"
+Global Const STYLE_DATE As String = "AG4:AG2500"
+Global Const STYLE_TABLE As String = "A4:AG2500"
 
 Public Function autoFill(cell As Range)
     Dim ISBN As String
@@ -12,10 +28,11 @@ Public Function autoFill(cell As Range)
         If DBKsuccess = False Then
             GRsuccess = fillBookByISBN(ISBN, cell.row)
         End If
-        If (DBKsuccess = False And GRsuccess = False) Then
+        If DBKsuccess = False And GRsuccess = False Then
             MsgBox "Chyba API: Kniha nebola nájdená"
         End If
     End If
+    Application.StatusBar = False
 End Function
 
 Public Function switchNames(meno As String)
@@ -23,9 +40,18 @@ Public Function switchNames(meno As String)
     Dim length As Integer
     Dim menoTemp As String
     
+    If meno = "kolektiv autorù" Or meno = "* antologie" Then
+        switchNames = "kolektiv"
+        Exit Function
+    End If
+    
+    If InStr(meno, "(p)") Then
+        meno = Replace(meno, " (p)", "")
+    End If
+    
     arrayOfWords = Split(meno, " ")
-    length = UBound(arrayOfWords) - LBound(arrayOfWords) + 1
-    For i = 0 To length - 2
+    length = UBound(arrayOfWords) - LBound(arrayOfWords)
+    For i = 0 To length - 1
         menoTemp = menoTemp & " " & arrayOfWords(i)
     Next i
 

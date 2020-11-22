@@ -18,42 +18,41 @@ Sub histogramVysky()
     End If
     
     'format of cell is TEXT
-    Range("$AH$16:$AH$36").NumberFormat = "@"
+    Range("AI16:AI36").NumberFormat = "@"
     
     '
     'Height range text
     '
     For i = 0 To 8
-      Range("$AH$" & 17 + i).Value = (i * 5) & " - " & (i * 5 + 5)  'creating labels
-      Range("$AI$" & 17 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range("Výška"), "<=" & (i * 5 + 5), Worksheets(ws).Range("Výška"), ">" & (i * 5))
+      Range("AI" & 17 + i).Value = (i * 5) & " - " & (i * 5 + 5)  'creating labels
+      Range("AJ" & 17 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range(HEIGTH_COLUMN), "<=" & (i * 5 + 5), Worksheets(ws).Range(HEIGTH_COLUMN), ">" & (i * 5))
     Next i
-    Range("$AH$25").Value = "<40"
+    Range("AI25").Value = "<40"
     
     '
     'Width range text
     '
     For i = 0 To 8
-      Range("$AH$" & 28 + i).Value = (i * 5) & " - " & (i * 5 + 5)
-      Range("$AI$" & 28 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range("Šírka"), "<=" & (i * 5 + 5), Worksheets(ws).Range("Šírka"), ">" & (i * 5))
+      Range("AI" & 28 + i).Value = (i * 5) & " - " & (i * 5 + 5)
+      Range("AJ" & 28 + i) = Application.WorksheetFunction.CountIfs(Worksheets(ws).Range(WIDTH_COLUMN), "<=" & (i * 5 + 5), Worksheets(ws).Range(WIDTH_COLUMN), ">" & (i * 5))
       'count how many values are between borders
-      'Im using named range
     Next i
-    Range("$AH$36").Value = "<40"
+    Range("AI36").Value = "<40"
     
-    Range("$AH$16").Value = "Výška knihy v cm"
-    Range("$AH$27").Value = "Šírka knihy v cm"
-    Range("$AH$16").WrapText = True
-    Range("$AH$27").WrapText = True
-    Range("$AI$16").Value = "Poèet kníh"
-    Range("$AI$27").Value = "Poèet kníh"
-    Range("$AH$16:$AI$16").Font.Italic = True
-    Range("$AH$27:$AI$27").Font.Italic = True
+    Range("AI16").Value = "Výška knihy v cm"
+    Range("AI27").Value = "Šírka knihy v cm"
+    Range("AI16").WrapText = True
+    Range("AI27").WrapText = True
+    Range("AI16").Value = "Poèet kníh"
+    Range("AI27").Value = "Poèet kníh"
+    Range("AI16:AJ16").Font.Italic = True
+    Range("AI27:AJ27").Font.Italic = True
     
     '
     'Drawing of borders for histogram values
     '
-    Range("$AH$16:$AI$16").Select
-    Range("$AH$16:$AI$16").HorizontalAlignment = xlLeft
+    Range("AI16:AJ16").Select
+    Range("AI16:AJ16").HorizontalAlignment = xlLeft
     With Selection.Borders(xlEdgeTop)
         .LineStyle = xlContinuous
         .Weight = xlMedium
@@ -70,14 +69,14 @@ Sub histogramVysky()
         .LineStyle = xlContinuous
         .Weight = xlThin
     End With
-    Range("$AH$25:$AI$25").Select
+    Range("AI25:AJ25").Select
     With Selection.Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
         .Weight = xlMedium
     End With
     
-    Range("$AH$27:$AI$27").Select
-    Range("$AH$27:$AI$27").HorizontalAlignment = xlLeft
+    Range("AI27:AJ27").Select
+    Range("AI27:AJ27").HorizontalAlignment = xlLeft
     With Selection.Borders(xlEdgeTop)
         .LineStyle = xlContinuous
         .Weight = xlMedium
@@ -94,17 +93,30 @@ Sub histogramVysky()
         .LineStyle = xlContinuous
         .Weight = xlThin
     End With
-    Range("$AH$36:$AI$36").Select
+    Range("AI36:AJ36").Select
     With Selection.Borders(xlEdgeBottom)
         .LineStyle = xlContinuous
         .Weight = xlMedium
     End With
     
     'set alignment
-    Range("$AH$17:$AI$25").HorizontalAlignment = xlRight
-    Range("$AH$28:$AI$36").HorizontalAlignment = xlRight
-    Range("$AH$17:$AI$25").VerticalAlignment = xlBottom
-    Range("$AH$28:$AI$36").VerticalAlignment = xlBottom
+    Range("AI17:AJ25").HorizontalAlignment = xlRight
+    Range("AI28:AJ36").HorizontalAlignment = xlRight
+    Range("AI17:AJ25").VerticalAlignment = xlBottom
+    Range("AI28:AJ36").VerticalAlignment = xlBottom
 
 End Sub
 
+2) = ilustrator
+    Cells(currentRow, 13) = translator
+    Cells(currentRow, 14) = title
+    Cells(currentRow, 21) = publisher
+    Cells(currentRow, 22) = year
+    Cells(currentRow, 23) = language
+    Cells(currentRow, 30) = numberOfPages
+    Cells(currentRow, 33) = Format(Date, "d.m.yyyy")
+    
+    Call TurnOnCalc
+    Application.StatusBar = False
+    fillBookByISBN = True
+End Function

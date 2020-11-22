@@ -12,10 +12,10 @@ Private alreadyPrompted As Boolean
 
 Private Sub Worksheet_Activate()
     If alreadyPrompted Then Exit Sub
-    If Range("AL10").Value / Range("AI10").Value < 0.15 Then
+    If Range("AM10").Value / Range("AJ10").Value < 0.15 Then
         Dim current As Double
-        current = Round(((Range("AL10").Value / Range("AI10").Value) * 100), 1)
-        MsgBox "Máš preeítaných menej než 15 percent kníh!" & vbNewLine & "Momentálne " & current & "%."
+        current = Round(((Range("AM10").Value / Range("AJ10").Value) * 100), 1)
+        MsgBox "Máš preèítaných menej než 15 percent kníh!" & vbNewLine & "Momentálne " & current & "%."
         alreadyPrompted = True
     End If
 End Sub
@@ -24,7 +24,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Dim cell As Range
     Dim ISBN As String
     
-    For Each cell In Range("AF4:AF2500")
+    For Each cell In Range(DATE_RANGE)
         If Not Intersect(Target, cell) Is Nothing Then
             If cell.Value = "Dnes" Or cell.Value = "dnes" Or cell.Value = "d" Then
                 cell.Value = Format(Date, "d.m.yyyy")
@@ -33,7 +33,7 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Next cell
     ActiveSheet.Calculate
     
-   For Each cell In Range("T4:T2500")
+   For Each cell In Range(ISBN_RANGE)
         If Not Intersect(Target, cell) Is Nothing Then
             If CheckBox1.Value = True Then
                 autoFill cell 'multiple arguments has to be without ()

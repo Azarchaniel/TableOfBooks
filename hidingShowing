@@ -16,8 +16,8 @@ Sub Makro6()
         X = "Knihy_Žanetka"
     End If
     
-    Set stlpce = ThisWorkbook.Worksheets(X).Range("$B$3:$J$3500")   'select columns of authors
-    Set stlpce2 = ThisWorkbook.Worksheets(X).Range("$L$3:$L$3500")  'and ilustrator
+    Set stlpce = ThisWorkbook.Worksheets(X).Range(AUTHORS_COLUMN)   'select columns of authors
+    Set stlpce2 = ThisWorkbook.Worksheets(X).Range(ILUSTRATOR_COLUMN)  'and ilustrator
     
     If stlpce.EntireColumn.Hidden = False Then  'if they are not hidden,
         stlpce.EntireColumn.Hidden = True       'hide them and

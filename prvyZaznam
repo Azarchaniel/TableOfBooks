@@ -5,9 +5,9 @@ Sub tlacitko_prvy_zaznam()
 '
 
 If ActiveSheet.Name = "Knihy_L'uboš" Or ActiveSheet.Name = "Knihy_Žanetka" Then
-    ActiveSheet.Range("$N$4").Select
+    ActiveSheet.Range("N4").Select
 End If
 If ActiveSheet.Name = "LP" Then
-    ActiveSheet.Range("$B$4").Select
+    ActiveSheet.Range("B4").Select
 End If
 End Sub

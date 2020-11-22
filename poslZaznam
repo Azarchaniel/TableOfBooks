@@ -6,11 +6,60 @@ Attribute tlacitko_posl_zaznam.VB_ProcData.VB_Invoke_Func = " \n14"
 '
 
 If ActiveSheet.Name = "Knihy_L'uboš" Or ActiveSheet.Name = "Knihy_Žanetka" Then
-    ActiveSheet.Range("$N$2499").Select 'select last row
+    ActiveSheet.Range("N2499").Select 'select last row
     Selection.End(xlUp).offset(1, 0).Select          'then go up to the nearest value and go one row down
 End If
 If ActiveSheet.Name = "LP" Then
-    ActiveSheet.Range("$B$499").Select
+    ActiveSheet.Range("B499").Select
     Selection.End(xlUp).offset(1, 0).Select
 End If
 End Sub
+ "N4:N2500"
+Global Const ILUSTRATOR_COLUMN As String = "L3:L3500"
+Global Const STYLE_BOLD As String = "A4:A2500,N4:N2500"
+Global Const STYLE_WEBDINGS As String = "X4:Y2500,AE4:AE2500"
+Global Const STYLE_NUMBER As String = "AA4:AC2500"
+Global Const STYLE_DATE As String = "AG4:AG2500"
+Global Const STYLE_TABLE As String = "A4:AG2500"
+
+Public Function autoFill(cell As Range)
+    Dim ISBN As String
+    Dim DBKsuccess As Boolean
+    Dim GRsuccess As Boolean
+    
+    ISBN = VBA.Replace(cell.Value, "-", "")
+    If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
+        DBKsuccess = scrapWeb(ISBN, cell.row)
+        If DBKsuccess = False Then
+            GRsuccess = fillBookByISBN(ISBN, cell.row)
+        End If
+        If DBKsuccess = False And GRsuccess = False Then
+            MsgBox "Chyba API: Kniha nebola nájdená"
+        End If
+    End If
+    Application.StatusBar = False
+End Function
+
+Public Function switchNames(meno As String)
+    Dim arrayOfWords
+    Dim length As Integer
+    Dim menoTemp As String
+    
+    If meno = "kolektiv autorù" Or meno = "* antologie" Then
+        switchNames = "kolektiv"
+        Exit Function
+    End If
+    
+    If InStr(meno, "(p)") Then
+        meno = Replace(meno, " (p)", "")
+    End If
+    
+    arrayOfWords = Split(meno, " ")
+    length = UBound(arrayOfWords) - LBound(arrayOfWords)
+    For i = 0 To length - 1
+        menoTemp = menoTemp & " " & arrayOfWords(i)
+    Next i
+
+    'for Return, you have to assing value to the name of a function
+    switchNames = arrayOfWords(UBound(arrayOfWords)) & ", " & Trim(menoTemp)
+End Function

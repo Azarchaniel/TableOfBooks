@@ -3,27 +3,17 @@ Sub graf()
     '
     'Function for creating graphs.
     '
-    
-    On Error GoTo ErrorCounter
+'    On Error GoTo ErrorCounter
     On Error Resume Next    'if error occures, usualy helps to run function second time
-    
-ErrorCounter:   'if error occures more than 5 times, user have to solve it in debugger
-    Dim i As Integer
-    Dim answer As String
-    i = i + 1
-    If i = 5 Then
-       answer = MsgBox("Chyba sa objavila prÌliö veæa kr·t. Spusù debugger a stlaË F5.", vbOKOnly)
-       Debug.Assert False
-    End If
     
     Dim Pic As Object
     
-    Range("MiestoPreGraf").Select   'double check of deleting space where graphs will be
-    Range("MiestoPreGraf").Delete
-    Range("MiestoPreGraf").Clear
+    Range(GRAPH_RANGE).Select   'double check of deleting space where graphs will be
+    Range(GRAPH_RANGE).Delete
+    Range(GRAPH_RANGE).Clear
 
     For Each Pic In ActiveSheet.Pictures
-        If Not Intersect(Pic.TopLeftCell, Range("$AB$15:$AN$35")) Is Nothing Then
+        If Not Intersect(Pic.TopLeftCell, Range(GRAPH_RANGE_PLUS_ONE)) Is Nothing Then
             Pic.Delete
         End If
     Next Pic
@@ -34,14 +24,14 @@ ErrorCounter:   'if error occures more than 5 times, user have to solve it in de
     ' /// Graph of height ///
     '
     
-    Range("$AK$16:$AQ$25").Select
+    Range("AL16:AR25").Select
     ActiveSheet.Shapes.AddChart2(201, xlColumnClustered).Select 'create graph of type 2
-    ActiveChart.SetSourceData Source:=Range("$AH$17:$AI$25")    'source data
+    ActiveChart.SetSourceData Source:=Range("AI17:AJ25")    'source data
     With ActiveChart.Parent
-        .Top = Range("$AK$16").Top 'set position of graph - upper border on this cell
-        .Left = Range("$AK$16").Left 'left border at this cell
-        .Width = Range("$AK$16:$AQ$25").Width
-        .Height = Range("$AK$16:$AQ$25").Height
+        .Top = Range("AL16").Top 'set position of graph - upper border on this cell
+        .Left = Range("AL16").Left 'left border at this cell
+        .Width = Range("AL16:AR25").Width
+        .Height = Range("AL16:AR25").Height
     End With
     ActiveChart.HasLegend = False
     With ActiveChart.Axes(xlCategory) 'add label to the lower axis
@@ -71,13 +61,13 @@ ErrorCounter:   'if error occures more than 5 times, user have to solve it in de
     
     ActiveSheet.ChartObjects("Graf1").Activate  'activate the specific graph
     ActiveChart.Parent.Cut                      'cut it to clipboard
-    Range("$AS$16").Select                      'and paste it to different cell
+    Range("AT16").Select                      'and paste it to different cell
     ActiveSheet.Paste
     'there was a problem with exporting graph as a picture, when it was only in clipboard
     
     ActiveSheet.ChartObjects("Graf1").Chart.CopyPicture xlScreen, xlBitmap  'select graph, copy it as a picture
     ActiveSheet.ChartObjects("Graf1").Delete    'delete graph
-    Range("$AK$16").Select
+    Range("AL16").Select
     ActiveSheet.Pictures.Paste.Select   'paste pic of graph
     
     
@@ -88,14 +78,14 @@ ErrorCounter:   'if error occures more than 5 times, user have to solve it in de
     'Maybe it could be written more general way and applied for both graphs at once,
     'but I doubt it would improve performance
     
-    Range("$AK$27:$AQ$36").Select
+    Range("AL27:AR36").Select
     ActiveSheet.Shapes.AddChart2(201, xlColumnClustered).Select
-    ActiveChart.SetSourceData Source:=Range("$AH$28:$AI$36")
+    ActiveChart.SetSourceData Source:=Range("AI28:AJ36")
     With ActiveChart.Parent
-        .Top = Range("$AK$27").Top
-        .Left = Range("$AK$27").Left
-        .Width = Range("$AK$27:$AQ$36").Width
-        .Height = Range("$AK$27:$AQ$36").Height
+        .Top = Range("AL27").Top
+        .Left = Range("AL27").Left
+        .Width = Range("AL27:AR36").Width
+        .Height = Range("AL27:AR36").Height
     End With
     ActiveChart.HasLegend = False
     With ActiveChart.Axes(xlCategory)
@@ -126,15 +116,12 @@ ErrorCounter:   'if error occures more than 5 times, user have to solve it in de
     
     ActiveSheet.ChartObjects("Graf2").Activate
     ActiveChart.Parent.Cut
-    Range("$AS$27").Select
+    Range("AT27").Select
     ActiveSheet.Paste
     
     ActiveSheet.ChartObjects("Graf2").Chart.CopyPicture xlScreen, xlBitmap
     ActiveSheet.ChartObjects("Graf2").Delete
-    Range("$AK27").Select
+    Range("AL27").Select
     ActiveSheet.Pictures.Paste.Select
-    
-    Range("$AK$37").Select
-    
 End Sub
 

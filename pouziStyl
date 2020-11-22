@@ -10,24 +10,26 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     Dim nazev As Range
     Dim exLibris As Range
     Dim datum As Range
+    Dim rozmery As Range
     'every sheet is slightly different, so I have to adjust settings
     
     If ActiveSheet.Name = "Knihy_L'uboš" Then
         Worksheets("Knihy_L'uboš").Activate
         tabulka = "Tabu1"
-        Set nazev = Range("A4:A2500,N4:N2500")
-        Set exLibris = Range("X4:Y2500,AD4:AD2500")
-        Set datum = Range("AF4:AF2500")
-        Set tRng = Range("A4:AF2500")
+        Set nazev = Range(STYLE_BOLD)
+        Set exLibris = Range(STYLE_WEBDINGS)
+        Set datum = Range(STYLE_DATE)
+        Set tRng = Range(STYLE_TABLE)
+        Set rozmery = Range(STYLE_NUMBER)
     End If
     If ActiveSheet.Name = "Knihy_Žanetka" Then
         Worksheets("Knihy_Žanetka").Activate
         tabulka = "Tabu2"
-        Set nazev = Range("A4:A2500,N4:N2500")
-        Set exLibris = Range("X4:Y2500,AD4:AD2500")
-        Set datum = Range("AF4:AF2500")
-        Set tRng = Range("A4:AF2500")
-        Set tRng = Range("A4:AF2500")
+        Set nazev = Range(STYLE_BOLD)
+        Set exLibris = Range(STYLE_WEBDINGS)
+        Set datum = Range(STYLE_DATE)
+        Set tRng = Range(STYLE_TABLE)
+        Set rozmery = Range(STYLE_NUMBER)
     End If
     If ActiveSheet.Name = "LP" Then
         Worksheets("LP").Activate
@@ -40,7 +42,7 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     
     Call TurnOffCalc
     Dim strikeRange As String
-    For Each row In Range("N4:N2500")
+    For Each row In Range(TITLE_COLUMN)
         If row.Font.Strikethrough = True Then
             strikeRange = strikeRange + "A" + CStr(row.row) + ":AF" + CStr(row.row) + ","
         End If
@@ -51,6 +53,7 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     nazev.Font.Bold = True
     exLibris.Font.Name = "Webdings"
     datum.NumberFormat = "d.m.yyyy"
+    rozmery.NumberFormat = "#,##0.0"
     If Len(strikeRange) > 0 Then
         strikeRange = Left(strikeRange, Len(strikeRange) - 1)
         Range(strikeRange).Font.Strikethrough = True
@@ -60,6 +63,10 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         .HorizontalAlignment = xlCenter
         .VerticalAlignment = xlCenter
     End With
+    datum.TextToColumns Destination:=Range(STYLE_DATE), DataType:=xlDelimited, _
+        TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
+        Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
+        :=Array(1, 4), TrailingMinusNumbers:=True
     Call progressBar(98, "hotové")
     Call TurnOnCalc
     Call tlacitko_prvy_zaznam

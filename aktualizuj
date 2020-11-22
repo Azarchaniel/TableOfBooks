@@ -30,15 +30,15 @@ Sub zorad_nazov_autor()
     Call TurnOffCalc 'to run faster
     'I dont want it to create graphs in LP or magazines sheet
     If ActiveSheet.Name = "Knihy_L'uboš" Or ActiveSheet.Name = "Knihy_Žanetka" Then
-        Worksheets(ws).Range("$AH$16:$AQ$36").Clear 'prepare area for graphs
-        Worksheets(ws).Range("$AH$16:$AQ$36").Delete
+        Worksheets(ws).Range(GRAPH_RANGE).Clear 'prepare area for graphs
+        Worksheets(ws).Range(GRAPH_RANGE).Delete
         Call histogramVysky 'calling subs
         Call graf
-        Range("$AG:$AG").Delete 'I couldnt identify a reason, why a new column is created everytime...
+        Range(FUCKING_COLUMN).Delete 'I couldnt identify a reason, why a new column is created everytime...
         '...functions are running. Therefore I'm just deleting column
-        Columns("$AG:$AG").Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
-        Range("$AG:$AG").ClearFormats
-        Range("$AG:$AT").Validation.Delete 'clear validation
+        Columns(FUCKING_COLUMN).Insert Shift:=xlToRight, CopyOrigin:=xlFormatFromLeftOrAbove
+        Range(FUCKING_COLUMN).ClearFormats
+        Range(FUCKING_COLUMN_PLUS_ONE).Validation.Delete 'clear validation
     End If
     Call progressBar(2, "hotové") 'set progress bar to 2
     
