@@ -7,12 +7,10 @@ Attribute VB_Exposed = True
 Attribute VB_TemplateDerived = False
 Attribute VB_Customizable = True
 Attribute VB_Control = "CheckBox1, 9, 0, MSForms, CheckBox"
-Option Explicit
-
 Private Sub Worksheet_Change(ByVal Target As Range)
     Dim cell As Range
     
-    For Each cell In Range("AF4:AF2500")
+    For Each cell In Range(DATE_RANGE)
         If Not Intersect(Target, cell) Is Nothing Then
             If cell.Value = "Dnes" Or cell.Value = "dnes" Or cell.Value = "d" Then
                 cell.Value = Format(Date, "d.m.yyyy")
@@ -21,10 +19,21 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     Next cell
     ActiveSheet.Calculate
     
-    For Each cell In Range("T4:T2500")
+    For Each cell In Range(ISBN_RANGE)
         If Not Intersect(Target, cell) Is Nothing Then
             If CheckBox1.Value = True Then
                 autoFill cell
+            End If
+        End If
+    Next cell
+    
+    For Each cell In Range(PUBLISHER_RANGE)
+        If Not Intersect(Target, cell) Is Nothing Then
+            If cell.Value = "SNKLU" Then
+                cell.Value = "Státní nakladelství krásné literatury a umení"
+            End If
+            If cell.Value = "SNKLHU" Then
+                cell.Value = "Státní nakladatelství krásné literatury, hudby a umení"
             End If
         End If
     Next cell

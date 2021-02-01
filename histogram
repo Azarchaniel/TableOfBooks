@@ -107,16 +107,3 @@ Sub histogramVysky()
 
 End Sub
 
-2) = ilustrator
-    Cells(currentRow, 13) = translator
-    Cells(currentRow, 14) = title
-    Cells(currentRow, 21) = publisher
-    Cells(currentRow, 22) = year
-    Cells(currentRow, 23) = language
-    Cells(currentRow, 30) = numberOfPages
-    Cells(currentRow, 33) = Format(Date, "d.m.yyyy")
-    
-    Call TurnOnCalc
-    Application.StatusBar = False
-    fillBookByISBN = True
-End Function

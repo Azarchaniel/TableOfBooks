@@ -1,5 +1,5 @@
 Attribute VB_Name = "vypnutieMsgBox"
-Attribute VB_Base = "0{5C3A93CF-5FDE-44C9-B4A5-9AB6478D8A1A}{569CA6EE-CCE8-4EBA-ADD1-3EFDC3C5359D}"
+Attribute VB_Base = "0{870F6FA8-66F8-42CE-8777-899265FE2F23}{52553067-0DCC-424E-9286-4EB1CE6510DA}"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -15,7 +15,7 @@ End Sub
 'save, backup, exit
 Private Sub sbe_Click()
     ThisWorkbook.Save   'save changes
-    X = Shell("POWERSHELL.exe " & """D:\Programy\dbklp.ps1""", 1)   'call a script through Powershell
+    X = Shell("POWERSHELL.exe " & """E:\Programy\dbklp.ps1""", 1)   'call a script through Powershell
     vypnutieMsgBox.Hide 'hide modal
     shouldCancel = False    'tell Excel that he can quit
 End Sub

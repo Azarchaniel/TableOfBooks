@@ -37,7 +37,7 @@ Private Sub Workbook_Activate()
 End Sub
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    If Len(Dir("D:\Programy\dbklp.ps1")) > 0 Then   'if there is file X, show my custom Exit modal
+    If Len(Dir("E:\Programy\dbklp.ps1")) > 0 Then   'if there is file X, show my custom Exit modal
         Application.DisplayAlerts = False   'dont show default exit modal
         vypnutieMsgBox.Show     'show modal
         Cancel = shouldCancel   'should or shouldnt exit Excel?

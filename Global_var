@@ -1,7 +1,8 @@
 Attribute VB_Name = "Global_var"
 Global shouldCancel As Boolean
-Global Const DATE_RANGE As String = "AF4:AF2500"
+Global Const DATE_RANGE As String = "AG4:AG2500"
 Global Const ISBN_RANGE As String = "T4:T2500"
+Global Const PUBLISHER_RANGE As String = "U4:U2500"
 Global Const GRAPH_RANGE As String = "AK16:AR36"
 Global Const GRAPH_RANGE_PLUS_ONE As String = "AJ15:AR37"
 Global Const FUCKING_COLUMN As String = "AH:AH"
@@ -14,7 +15,6 @@ Global Const ILUSTRATOR_COLUMN As String = "L3:L3500"
 Global Const STYLE_BOLD As String = "A4:A2500,N4:N2500"
 Global Const STYLE_WEBDINGS As String = "X4:Y2500,AE4:AE2500"
 Global Const STYLE_NUMBER As String = "AA4:AC2500"
-Global Const STYLE_DATE As String = "AG4:AG2500"
 Global Const STYLE_TABLE As String = "A4:AG2500"
 
 Public Function autoFill(cell As Range)
@@ -26,7 +26,9 @@ Public Function autoFill(cell As Range)
     If IsEmpty(cell.offset(0, -6)) And Len(cell.Value) > 5 Then 'if Title is empty and ISBN at least 5 chars
         DBKsuccess = scrapWeb(ISBN, cell.row)
         If DBKsuccess = False Then
-            GRsuccess = fillBookByISBN(ISBN, cell.row)
+            If Len(ISBN) > 7 Then
+                GRsuccess = fillBookByISBN(ISBN, cell.row)
+            End If
         End If
         If DBKsuccess = False And GRsuccess = False Then
             MsgBox "Chyba API: Kniha nebola nájdená"

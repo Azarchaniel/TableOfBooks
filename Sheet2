@@ -6,3 +6,15 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Attribute VB_TemplateDerived = False
 Attribute VB_Customizable = True
+Private Sub Worksheet_Change(ByVal Target As Range)
+    Dim cell As Range
+    
+    For Each cell In Range("L4:L500")
+        If Not Intersect(Target, cell) Is Nothing Then
+            If cell.Value = "Dnes" Or cell.Value = "dnes" Or cell.Value = "d" Then
+                cell.Value = Format(Date, "d.m.yyyy")
+            End If
+        End If
+    Next cell
+End Sub
+

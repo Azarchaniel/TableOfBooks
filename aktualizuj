@@ -6,7 +6,7 @@ Sub zorad_nazov_autor()
     Dim table As String
     Dim ws As String
     
-    StartTime = Now() 'for checking performance speed
+'    StartTime = Now() 'for checking performance speed
     
     Call InitProgressBar("hotové")
     If ActiveSheet.Name = "Knihy_L'uboš" Then
@@ -82,10 +82,10 @@ Sub zorad_nazov_autor()
     Range("A4").Select
     Range("A1").Select
     Unload Progress 'hide progression modal
-    finTime = Now()    'for checking performance speed
-    resultTime = DateDiff("s", StartTime, finTime)
-    Application.StatusBar = "Proces prebehol za " & resultTime & " sekúnd." 'show result in sec in Status bar
-    Application.OnTime Now + TimeValue("00:00:05"), "clearStatusBar"    'after five seconds, clear status bar
+'    finTime = Now()    'for checking performance speed
+'    resultTime = DateDiff("s", StartTime, finTime)
+'    Application.StatusBar = "Proces prebehol za " & resultTime & " sekúnd." 'show result in sec in Status bar
+'    Application.OnTime Now + TimeValue("00:00:05"), "clearStatusBar"    'after five seconds, clear status bar
 End Sub
 
 Sub clearStatusBar()

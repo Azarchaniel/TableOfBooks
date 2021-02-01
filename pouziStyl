@@ -18,7 +18,7 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         tabulka = "Tabu1"
         Set nazev = Range(STYLE_BOLD)
         Set exLibris = Range(STYLE_WEBDINGS)
-        Set datum = Range(STYLE_DATE)
+        Set datum = Range(DATE_RANGE)
         Set tRng = Range(STYLE_TABLE)
         Set rozmery = Range(STYLE_NUMBER)
     End If
@@ -27,17 +27,16 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         tabulka = "Tabu2"
         Set nazev = Range(STYLE_BOLD)
         Set exLibris = Range(STYLE_WEBDINGS)
-        Set datum = Range(STYLE_DATE)
+        Set datum = Range(DATE_RANGE)
         Set tRng = Range(STYLE_TABLE)
         Set rozmery = Range(STYLE_NUMBER)
     End If
     If ActiveSheet.Name = "LP" Then
         Worksheets("LP").Activate
         tabulka = "Tabu3"
-        Set nazev = Range("A4:B500")
-        Set exLibris = Range("A1")
+        Set nazev = Range("B4:B500")
         Set datum = Range("L4:L500")
-        Set tRng = Range("A4:A500")
+        Set tRng = Range("A4:L500")
     End If
     
     Call TurnOffCalc
@@ -51,9 +50,13 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
     tRng.ClearFormats
     ActiveSheet.ListObjects(tabulka).TableStyle = "TableStyleMedium1"
     nazev.Font.Bold = True
-    exLibris.Font.Name = "Webdings"
+    If Not exLibris Is Nothing Then
+        exLibris.Font.Name = "Webdings"
+    End If
     datum.NumberFormat = "d.m.yyyy"
-    rozmery.NumberFormat = "#,##0.0"
+    If Not rozmery Is Nothing Then
+        rozmery.NumberFormat = "#,##0.0"
+    End If
     If Len(strikeRange) > 0 Then
         strikeRange = Left(strikeRange, Len(strikeRange) - 1)
         Range(strikeRange).Font.Strikethrough = True
@@ -63,10 +66,33 @@ Attribute applyStyle.VB_ProcData.VB_Invoke_Func = " \n14"
         .HorizontalAlignment = xlCenter
         .VerticalAlignment = xlCenter
     End With
-    datum.TextToColumns Destination:=Range(STYLE_DATE), DataType:=xlDelimited, _
+    datum.TextToColumns Destination:=Range(DATE_RANGE), DataType:=xlDelimited, _
         TextQualifier:=xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, _
         Semicolon:=False, Comma:=False, Space:=False, Other:=False, FieldInfo _
         :=Array(1, 4), TrailingMinusNumbers:=True
+    If ActiveSheet.Name <> "LP" Then
+        Columns("A:C").ColumnWidth = 19
+        Columns("D:J").ColumnWidth = 6.5
+        Columns("K:M").ColumnWidth = 17
+        Columns("N:N").ColumnWidth = 27.43
+        Columns("O:O").ColumnWidth = 12.57
+        Columns("P:P").ColumnWidth = 16
+        Columns("Q:Q").ColumnWidth = 9.43
+        Columns("R:R").ColumnWidth = 16
+        Columns("S:S").ColumnWidth = 9.43
+        Columns("T:T").ColumnWidth = 17
+        Columns("U:U").ColumnWidth = 14.86
+        Columns("V:V").ColumnWidth = 8.29
+        Columns("W:W").ColumnWidth = 7.29
+        Columns("X:Y").ColumnWidth = 5.57
+        Columns("Z:Z").ColumnWidth = 11.29
+        Columns("AA:AC").ColumnWidth = 5
+        Columns("AD:AD").ColumnWidth = 9.29
+        Columns("AE:AE").ColumnWidth = 5
+        Columns("AF:AF").ColumnWidth = 12.29
+        Columns("AG:AG").ColumnWidth = 10.14
+        Call Makro6 'because changin width is unhiding columns
+    End If
     Call progressBar(98, "hotové")
     Call TurnOnCalc
     Call tlacitko_prvy_zaznam
